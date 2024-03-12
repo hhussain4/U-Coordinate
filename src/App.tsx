@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Calendar from './pages/Calendar';
+import Calendar from './pages/CalendarView';
 
 function App() {
   // make index element whatever we decide to be the home page
