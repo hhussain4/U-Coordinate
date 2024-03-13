@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface CalendarDay {
     currentMonth: boolean;
     date: Date;

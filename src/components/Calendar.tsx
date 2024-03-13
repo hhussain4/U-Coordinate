@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
-import CalendarDays, { CalendarDay } from './Calendar-days'; // Assuming the correct export from CalendarDays
+import { Component } from 'react';
+import CalendarDays, { CalendarDay } from './Calendar-days';
 import './Calendar.css';
-
-interface CalendarProps { }
 
 interface CalendarState {
     currentDay: Date;
 }
 
-export default class Calendar extends Component<CalendarProps, CalendarState> {
+export default class Calendar extends Component<{}, CalendarState> {
     private readonly weekdays: string[];
     private readonly months: string[];
 
-    constructor(props: CalendarProps) {
+    constructor(props: {}) {
         super(props);
 
         this.weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

@@ -13,16 +13,15 @@
     align-items: center;
 }
 
-img {
+.navbar img {
+    /* Reduced image size */
     width: 40px;
-        /* Reduced image size */
-        height: 40px;
-        /* Reduced image size */
-        margin: 0;
-        padding: 5px;
-        border: 0px;
-        object-fit: contain;
+    height: 40px;
 
+    margin: 0;
+    padding: 5px;
+    border: 0px;
+    object-fit: contain;
 }
 
 .navbar h1 {

@@ -1,6 +1,5 @@
 import NavBar from '../components/NavBar';
-import React from 'react';
-import Calendar from '../components/Calendar'; // Assuming the path is correct
+import Calendar from '../components/Calendar';
 
 const CalendarView: React.FC = () => {
     return (
