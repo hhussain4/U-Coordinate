@@ -1,13 +1,17 @@
 .calendar {
-    max-width: 100%;
+    max-width: 55%;
     height: auto;
-    margin: auto;
+    margin: 10px 0 10px auto;
+    padding: 10px;
     /* Center the calendar horizontally */
     display: flex;
     flex-direction: column;
     justify-content: center;
     /* Center the calendar vertically */
     align-items: center;
+    border: 1px solid #847777;
+    border-radius: 15px;
+    background-color: #d2c6f6;
 }
 
 .calendar-header {
@@ -17,8 +21,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-        /* Center the content horizontally */
-        margin-bottom: 10px;
+    /* Center the content horizontally */
+    margin-bottom: 10px;
 }
 
 .calendar-body {
@@ -31,6 +35,16 @@
 .table-header {
     width: 100%;
     height: 10%;
+    /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.table-header h2{
+    width: 100%;
+    height: 10%;
+    margin-bottom: 0;
     /* Adjust as needed */
     display: flex;
     align-items: center;
@@ -58,10 +72,11 @@
     height: 90px;
     position: relative;
     border: 1px solid #a6a6a6;
+    background-color: #ffffff;
 }
 
 .calendar-day:hover {
-    background-color: rgba(0, 0, 0, .10);
+    background-color: #efefef;
 }
 
 .calendar-day p {

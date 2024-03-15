@@ -1,4 +1,4 @@
-import './NavBar.css'
+import '@styles/NavBar.css'
 
 const NavBar: React.FC = () => {
     return (

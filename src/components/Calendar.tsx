@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import CalendarDays, { CalendarDay } from './Calendar-days';
-import './Calendar.css';
+import '@styles/Calendar.css';
 
 interface CalendarState {
     currentDay: Date;
@@ -29,10 +29,10 @@ export default class Calendar extends Component<{}, CalendarState> {
     render() {
         return (
             <div className="calendar">
-                <div className="calendar-header">
-                    <h2>{this.months[this.state.currentDay.getMonth()]} {this.state.currentDay.getFullYear()}</h2>
-                </div>
                 <div className="calendar-body">
+                    <div className="table-header">
+                        <h2>{this.months[this.state.currentDay.getMonth()]} {this.state.currentDay.getFullYear()}</h2>
+                    </div>
                     <div className="table-header">
                         {
                             this.weekdays.map((weekday) => {
