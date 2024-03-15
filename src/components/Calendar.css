@@ -1,13 +1,47 @@
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding-right: 20px; /* To ensure content is not cut off */
+    width: 100%;
+}
+
+.create-event-btn {
+    margin-right: auto; /* Pushes the button to the right */
+    padding: 10px 20px; /* Adjust padding as needed */
+    /* Add more styling as needed for the button */
+    cursor: pointer;
+    background-color: #F1ECE4; /* Example background color */
+    color: rgb(0, 0, 0); /* Example text color */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    outline: 1px solid black;
+}
+
 .calendar {
+    width: 60%; /* newly added */
+    /*
     max-width: 100%;
     height: auto;
     margin: auto;
     /* Center the calendar horizontally */
-    display: flex;
+   /* display: flex;
     flex-direction: column;
     justify-content: center;
     /* Center the calendar vertically */
-    align-items: center;
+   /* align-items: center;
+    /* Increase left and right padding */
+   /* padding-left: 20px;
+    padding-right: 20px;
+    /* Increase left and right border */
+   /* border-left: 2px solid #a6a6a6;
+    border-right: 2px solid #a6a6a6; */
+}
+
+.calendar-container{
+    display: flex; 
+    justify-content: flex-end; 
+    width: 100%;
 }
 
 .calendar-header {
@@ -78,4 +112,15 @@
 .selected p {
     color: #cc0000;
     font-weight: bold;
+}
+
+.checkbox-container {
+    margin-top: auto;
+    /* Pushes the checkboxes to the bottom */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+    /* Add some padding */
 }

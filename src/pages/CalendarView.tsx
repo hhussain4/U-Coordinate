@@ -5,8 +5,12 @@ const CalendarView: React.FC = () => {
     return (
         <>
             <NavBar />
-            <Calendar />
-            
+            <div className="content-wrapper">
+                <button className="create-event-btn">Create Event</button>
+                <div className="calendar-container">
+                    <Calendar />
+                </div>
+            </div>
         </>
     );
 }
