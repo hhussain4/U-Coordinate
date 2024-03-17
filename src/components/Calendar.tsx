@@ -1,16 +1,33 @@
 import { Component } from 'react';
 import CalendarDays, { CalendarDay } from './Calendar-days';
 import './Calendar.css';
+import '../pages/CalendarView';
+
+interface CalendarEvent {
+    name: string;
+    description: string;
+    start: Date;
+    end: Date;
+    location: string;
+    usersInvolved: string[];
+}
+
 
 interface CalendarState {
     currentDay: Date;
 }
 
-export default class Calendar extends Component<{}, CalendarState> {
+interface CalendarProps {
+    currentDay: Date;
+    events: CalendarEvent[];
+  }
+  
+
+export default class Calendar extends Component<CalendarProps, CalendarState> {
     private readonly weekdays: string[];
     private readonly months: string[];
 
-    constructor(props: {}) {
+    constructor(props: CalendarProps) {
         super(props);
 
         this.weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -27,6 +44,7 @@ export default class Calendar extends Component<{}, CalendarState> {
     }
 
     render() {
+        const { currentDay, events } = this.props;
         return (
             <div className="calendar">
                 <div className="calendar-header">
@@ -40,9 +58,9 @@ export default class Calendar extends Component<{}, CalendarState> {
                             })
                         }
                     </div>
-                    <CalendarDays day={this.state.currentDay} changeCurrentDay={this.changeCurrentDay} events={[]} />
+                    <CalendarDays day={currentDay} changeCurrentDay={this.changeCurrentDay} events={events} />
                 </div>
             </div>
-        )
+        );
     }
 }

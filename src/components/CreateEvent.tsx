@@ -16,31 +16,31 @@ interface CreateEventProps {
   addEvent: (newEvent: CalendarEvent) => void;
 }
 
-const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => {
+const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) => {
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Assert that each element exists and is of the expected type
     const form = e.currentTarget;
-    const name = (form.elements.namedItem('name') as HTMLInputElement).value;
-    const description = (form.elements.namedItem('description') as HTMLTextAreaElement).value;
-    const start = (form.elements.namedItem('start') as HTMLInputElement).value;
-    const end = (form.elements.namedItem('end') as HTMLInputElement).value;
-    const location = (form.elements.namedItem('location') as HTMLInputElement).value;
-    const users = (form.elements.namedItem('users') as HTMLInputElement).value.split(',');
+    const name = form.elements.namedItem('name') as HTMLInputElement;
+    const description = form.elements.namedItem('description') as HTMLTextAreaElement;
+    const start = form.elements.namedItem('start') as HTMLInputElement;
+    const end = form.elements.namedItem('end') as HTMLInputElement;
+    const location = form.elements.namedItem('location') as HTMLInputElement;
+    const users = form.elements.namedItem('users') as HTMLInputElement;
 
-    const newEvent: CalendarEvent = {
-      name,
-      description,
-      start: new Date(start),
-      end: new Date(end),
-      location,
-      usersInvolved: users,
-    };
-    
-    addEvent(newEvent);
-    onClose();
+    if (name && description && start && end && location && users) {
+      const newEvent: CalendarEvent = {
+        name: name.value,
+        description: description.value,
+        start: new Date(start.value),
+        end: new Date(end.value),
+        location: location.value,
+        usersInvolved: users.value.split(','),
+      };
+      addEvent(newEvent);
+      onClose();
+    }
   };
 
   return (
@@ -48,7 +48,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => {
       <div className="modal">
         <button className="modal-close-btn" onClick={onClose}>X</button>
         <h2>Create Event</h2>
-        <form onSubmit={handleSubmit}> /* this allows us to capture user input for a new event. Allows us to also include more complex event handling later like backend work or API stuff  */
+        <form onSubmit={handleSubmit}> {/* this allows us to capture user input for a new event. Allows us to also include more complex event handling later like backend work or API stuff  */}
           <label>
             Event Name:
             <input type="text" name="name" />
@@ -78,7 +78,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose }) => {
       </div>
     </div>
   );
-}
+};
 
 export default CreateEvent;
 
