@@ -13,8 +13,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events }) => {
         <div key={index} className="event-box">
           <h3>{event.name}</h3>
           <p>{event.description}</p>
-          <p>Start: {event.start.toLocaleString()}</p>
-          <p>End: {event.end.toLocaleString()}</p>
+          <p>Start: {new Date(event.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
+          <p>End: {new Date(event.end).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</p>
           <p>Location: {event.location}</p>
           <p>Users Involved: {event.usersInvolved.join(', ')}</p>
         </div>
