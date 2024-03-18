@@ -12,7 +12,7 @@ export class Ticket {
     protected issue: string;
     protected resolved: boolean;
 
-    constructor(name: string, type: TicketType, priority: number, issue: string, resolved=false) {
+    constructor(name: string, type: TicketType, priority: number, issue: string, resolved = false) {
         this.name = name;
         this.type = type;
         this.priority = priority;
@@ -58,8 +58,8 @@ export class Ticket {
         this.issue = issue;
     }
 
-    setResolved(resolved: boolean) {
-        this.resolved = resolved;
+    resolve() {
+        this.resolved = !this.resolved;
     }
 }
 

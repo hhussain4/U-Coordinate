@@ -1,16 +1,17 @@
 import { Ticket, TicketType } from "./Ticket";
+import { User } from "./User";
 
 export class TimeOffTicket extends Ticket{
-    private employeeName: string;
-    private employerName: string;
+    private employee: User;
+    private employer: User;
     private startDate: Date;
     private endDate: Date;
 
-    constructor(employeeName:string, employerName: string, startDate: Date, endDate: Date) {
+    constructor(employee: User, employer: User, startDate: Date, endDate: Date) {
         super("Time Off Request", TicketType.TimeOff, 2,
-         `${employeeName} is requesting that ${employerName} grants them time off from ${startDate} to ${endDate}`);
-        this.employeeName = employeeName;
-        this.employerName = employerName;
+         `${employee.getDisplayName()} is requesting that ${employer.getDisplayName()} grants them time off from ${startDate} to ${endDate}`);
+        this.employee = employee;
+        this.employer = employer;
         this.startDate = startDate;
         this.endDate = endDate;
     }
@@ -20,7 +21,7 @@ export class TimeOffTicket extends Ticket{
         this.resolved = true;
 
         if (message) {
-            this.issue += `\n${this.employerName} has approved your request for the following reason: ${message}`;
+            this.issue += `\n${this.employer.getDisplayName()} has approved your request for the following reason: ${message}`;
         }
     }
 
@@ -28,22 +29,22 @@ export class TimeOffTicket extends Ticket{
         this.resolved = true;
 
         if (message) {
-            this.issue += `\n${this.employerName} has denied your request for the following reason: ${message}`;
+            this.issue += `\n${this.employer.getDisplayName()} has denied your request for the following reason: ${message}`;
         }
     }
 
     getTimeOffIssue(): string {
-        return `${this.employeeName} is requesting that ${this.employerName} grants them time off from ${this.startDate} to ${this.endDate}`;
+        return `${this.employee.getDisplayName()} is requesting that ${this.employer.getDisplayName()} grants them time off from ${this.startDate} to ${this.endDate}`;
     }
     
     // setters
-    setEmployeeName(employeeName: string) {
-        this.employeeName = employeeName;
+    setEmployeeName(employee: User) {
+        this.employee = employee;
         this.issue = this.getTimeOffIssue();
     }
 
-    setEmployerName(employerName: string) {
-        this.employerName = employerName;
+    setEmployerName(employer: User) {
+        this.employer = employer;
         this.issue = this.getTimeOffIssue();
     }
 
@@ -55,12 +56,12 @@ export class TimeOffTicket extends Ticket{
     }
 
     // getters
-    getEmployeeName(): string {
-        return this.employeeName;
+    getEmployee(): User {
+        return this.employee;
     }
 
-    getEmployerName(): string {
-        return this.employerName;
+    getEmployer(): User {
+        return this.employer;
     }
 
     getStartDate(): Date {

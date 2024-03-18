@@ -1,5 +1,3 @@
-import { Ticket, TicketType } from "./Ticket";
-
 export class User {
     private username: string;
     private displayName: string;
@@ -7,16 +5,12 @@ export class User {
     private timezone: string;
     private privilege: boolean;
 
-    constructor(username:string, displayName: string, theme: string, timezone:string, privilege:boolean) {
+    constructor(username:string, displayName: string, theme: string, timezone:string, privilege:boolean = false) {
         this.username = username;
         this.displayName = displayName;
         this.theme = theme;
         this.timezone = timezone;
         this.privilege = privilege;
-    }
-
-    createTicket(): Ticket {
-        return new Ticket("", TicketType.Bug, 0, "", false);
     }
     
     toJSON() {
