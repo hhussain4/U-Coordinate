@@ -76,3 +76,8 @@
 .dropbtn:hover {
     background-color: #ddd;
 }
+
+body.dark-mode {
+    background-color: darkgray;
+    color: #ffffff;
+  }
