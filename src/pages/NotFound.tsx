@@ -1,9 +1,6 @@
-import NavBar from '@components/NavBar';
-
 const NotFound: React.FC = () => {
     return (
         <>
-            <NavBar />
             <br></br>
             <center>
                 <img src = '../../logo.png' width="100px" height="100px"></img>

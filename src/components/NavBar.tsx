@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import DarkModeToggle from '@components/DarkMode'
 import '@styles/NavBar.css'
 
 const NavBar: React.FC = () => {
@@ -16,6 +16,7 @@ const NavBar: React.FC = () => {
             </div>
             <img src='../../logo.png'></img>
             {/* Add navigation elements here */}
+            <DarkModeToggle />
         </div>
     );
 }
