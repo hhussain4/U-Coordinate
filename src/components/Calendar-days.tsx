@@ -1,3 +1,12 @@
+export interface CalendarEvent {
+    name: string;
+    description: string;
+    start: Date;
+    end: Date;
+    location: string;
+    usersInvolved: string[];
+  }
+
 export interface CalendarDay {
     currentMonth: boolean;
     date: Date;
@@ -5,11 +14,14 @@ export interface CalendarDay {
     number: number;
     selected: boolean;
     year: number;
+    events?: CalendarEvent[];
 }
 
 interface CalendarDaysProps {
     day: Date;
+    events: CalendarEvent[];
     changeCurrentDay: (day: CalendarDay) => void;
+    onSelectDay: (events: CalendarEvent[]) => void; // New callback prop
 }
 
 const CalendarDays: React.FC<CalendarDaysProps> = (props) => {
@@ -26,31 +38,44 @@ const CalendarDays: React.FC<CalendarDaysProps> = (props) => {
             firstDayOfMonth.setDate(firstDayOfMonth.getDate() + 1);
         }
 
+        //find events for this day
+        const dayEvents = props.events.filter(event => {
+            const eventDate = new Date(event.start).toDateString();
+            return eventDate === firstDayOfMonth.toDateString();
+        });
+
         let calendarDay: CalendarDay = {
             currentMonth: (firstDayOfMonth.getMonth() === props.day.getMonth()),
             date: new Date(firstDayOfMonth),
             month: firstDayOfMonth.getMonth(),
             number: firstDayOfMonth.getDate(),
             selected: (firstDayOfMonth.toDateString() === props.day.toDateString()),
-            year: firstDayOfMonth.getFullYear()
-        }
+            year: firstDayOfMonth.getFullYear(),
+            events: dayEvents.length > 0 ? dayEvents : undefined
+        };
 
         currentDays.push(calendarDay);
     }
 
     const handleDayClick = (day: CalendarDay) => {
         props.changeCurrentDay(day);
+        props.onSelectDay(day.events || []);
     }
 
     return (
         <div className="table-content">
-            {currentDays.map((day) => (
+            {currentDays.map((day, index) => (
                 <div
-                    key={day.date.toISOString()}
-                    className={"calendar-day" + (day.currentMonth ? " current" : "") + (day.selected ? " selected" : "")}
+                    key={index}
+                    className={`calendar-day ${day.currentMonth ? " current" : ""} ${day.selected ? " selected" : ""}`}
                     onClick={() => handleDayClick(day)}
                 >
                     <p>{day.number}</p>
+                    {day.events && day.events.map((event, eventIndex) => (
+                        <div key={eventIndex} className="calendar-event">
+                            {event.name}
+                        </div>
+                    ))}
                 </div>
             ))}
         </div>

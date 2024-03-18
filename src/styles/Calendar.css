@@ -1,98 +1,126 @@
 .calendar {
-    max-width: 55%;
-    height: auto;
-    margin: 10px 0 10px auto;
-    padding: 10px;
-    /* Center the calendar horizontally */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* Center the calendar vertically */
-    align-items: center;
-    border: 1px solid #847777;
-    border-radius: 15px;
-    background-color: #d2c6f6;
+  max-width: 55%;
+  height: auto;
+  margin: 10px 0 10px auto;
+  padding: 10px;
+  /* Center the calendar horizontally */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Center the calendar vertically */
+  align-items: center;
+  border: 1px solid #847777;
+  border-radius: 15px;
+  background-color: #d2c6f6;
 }
 
 .calendar-header {
-    width: 100%;
-    height: 10%;
-    /* Adjust as needed */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Center the content horizontally */
-    margin-bottom: 10px;
+  width: 100%;
+  height: 10%;
+  /* Adjust as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Center the content horizontally */
+  margin-bottom: 10px;
 }
 
 .calendar-body {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .table-header {
-    width: 100%;
-    height: 10%;
-    /* Adjust as needed */
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  width: 100%;
+  height: 10%;
+  /* Adjust as needed */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .table-header h2{
-    width: 100%;
-    height: 10%;
-    margin-bottom: 0;
-    /* Adjust as needed */
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  width: 100%;
+  height: 10%;
+  margin-bottom: 0;
+  /* Adjust as needed */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .weekday {
-    width: 14%;
-    /* Adjust as needed for 7 days */
-    text-align: center;
+  width: 14%;
+  /* Adjust as needed for 7 days */
+  text-align: center;
 }
 
 .table-content {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    box-sizing: border-box;
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .calendar-day {
-    width: 14%;
-    /* Adjust as needed for 7 days */
-    height: 90px;
-    position: relative;
-    border: 1px solid #a6a6a6;
-    background-color: #ffffff;
+  width: 14%;
+  /* Adjust as needed for 7 days */
+  height: 90px;
+  position: relative;
+  border: 1px solid #a6a6a6;
+  background-color: #ffffff;
 }
 
 .calendar-day:hover {
-    background-color: #efefef;
+  background-color: #efefef;
 }
 
 .calendar-day p {
-    position: absolute;
-    right: 5px;
-    color: #a6a6a6;
-    margin-top: 0;
+  position: absolute;
+  right: 5px;
+  color: #a6a6a6;
+  margin-top: 0;
 }
 
 .current p {
-    color: #000000;
+  color: #000000;
 }
 
 .selected p {
-    color: #cc0000;
-    font-weight: bold;
+  color: #cc0000;
+  font-weight: bold;
+}
+
+.create-event-btn {
+/*
+  margin-right: auto; /* Pushes the button to the right 
+  padding: 10px 20px; /* Adjust padding as needed 
+  cursor: pointer; 
+  background-color: #F1ECE4; /* Example background color 
+  color: rgb(0, 0, 0); /* Example text color 
+  border: none;
+  border-radius: 5px; /* Rounded corners 
+  display: block; /* it takes its own line 
+  outline: 1px solid black; 
+  margin-bottom: 20px; /* adds space below button */ 
+  
+  width: 100px; /* Width of the button */
+  height: 40px; /* Height of the button */
+  margin: 10px auto 0 auto; /* 10px top margin, auto horizontal margins */
+  margin-left: 0px;
+  display: block; /* Necessary for auto margins to center the button */
+  background-color: #F1ECE4; /* Example background color */
+  color: rgb(0, 0, 0); /* Example text color */
+  border: none;
+  border-radius: 5px; /* Rounded corners */
+  outline: 1px solid black;
+  cursor: pointer;
+  text-align: center; /* Center the text inside the button */
+  line-height: 40px; /* Vertically center the text inside the button */
 }
 
 body.dark-mode {
