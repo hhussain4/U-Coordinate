@@ -1,0 +1,44 @@
+.content-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    padding-right: 20px;
+    width: 100%;
+}
+
+.calendar-container {
+    width: 100%;
+}
+
+.create-event-btn {
+    width: 100px;
+    height: 40px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: block;
+    /* Necessary for auto margins to center the button */
+    background-color: #F1ECE4;
+    /* Example background color */
+    color: rgb(0, 0, 0);
+    /* Example text color */
+    border: none;
+    border-radius: 5px;
+    /* Rounded corners */
+    outline: 1px solid black;
+    cursor: pointer;
+    text-align: center;
+    /* Center the text inside the button */
+    /* line-height: 40px; */
+    /* Vertically center the text inside the button */
+}
+
+.event-details-container {
+    /* Styles for the container itself */
+    flex: 5;
+    /* Adjust as needed */
+    margin-left: 40px;
+    margin-right: 40px;
+    /* Space between event details and calendar */
+    width: 100%
+}

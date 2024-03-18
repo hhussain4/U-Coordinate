@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Calendar from '@components/Calendar';
 import CreateEvent from '@components/CreateEvent';
-import EventDetails from '@components/EventDetails'; 
+import EventDetails from '@components/EventDetails';
+import '@styles/CalendarView.css';
 
 //new code below helps define an event type 
 
@@ -12,12 +13,10 @@ interface CalendarEvent {
     end: Date;
     location: string;
     usersInvolved: string[];
-  }
+}
 
-
-  const CalendarView: React.FC = () => {
+const CalendarView: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentDay, setCurrentDay] = useState(new Date()); // State for managing the current day
     const [events, setEvents] = useState<CalendarEvent[]>(() => {
         // Retrieve events from local storage or initialize as empty array
         const savedEvents = localStorage.getItem('events');
@@ -25,8 +24,6 @@ interface CalendarEvent {
     });
     //adding state to store the selected date's events
     const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>([]);
-
-    
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -46,24 +43,20 @@ interface CalendarEvent {
         });
     };
 
-    
-
-    
-
     return (
         <>
-        <div className="content-wrapper">
-            {/* Split view: Left side for event details, right side for calendar */}
-            <div className="event-details-container">
-                <EventDetails events={selectedDayEvents} />
-            </div>
-            <div className="calendar-container">
+            <div className="content-wrapper">
                 <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
-                <Calendar currentDay={currentDay} events={events} onSelectDay={handleSelectDay} />
+                {/* Split view: Left side for event details, right side for calendar */}
+                <div className="event-details-container">
+                    <EventDetails events={selectedDayEvents} />
+                </div>
+                <div className="calendar-container">
+                    <Calendar events={events} onSelectDay={handleSelectDay} />
+                </div>
             </div>
-        </div>
-        <CreateEvent isOpen={isModalOpen} onClose={handleCloseModal} addEvent={addEvent} />
-    </>
+            <CreateEvent isOpen={isModalOpen} onClose={handleCloseModal} addEvent={addEvent} />
+        </>
     );
 };
 

@@ -5,7 +5,7 @@ export interface CalendarEvent {
     end: Date;
     location: string;
     usersInvolved: string[];
-  }
+}
 
 export interface CalendarDay {
     currentMonth: boolean;

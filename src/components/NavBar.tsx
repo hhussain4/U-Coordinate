@@ -16,7 +16,9 @@ const NavBar: React.FC = () => {
             </div>
             <img src='../../logo.png'></img>
             {/* Add navigation elements here */}
-            <DarkModeToggle />
+            <div className='dark-mode-toggle'>
+                <DarkModeToggle />
+            </div>
         </div>
     );
 }

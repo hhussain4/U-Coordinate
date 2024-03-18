@@ -1,13 +1,13 @@
 import '@styles/CreateEvent.css';
 
 interface CalendarEvent {
-    name: string;
-    description: string;
-    start: Date;
-    end: Date;
-    location: string;
-    usersInvolved: string[];
-  }
+  name: string;
+  description: string;
+  start: Date;
+  end: Date;
+  location: string;
+  usersInvolved: string[];
+}
 
 interface CreateEventProps {
   isOpen: boolean;
@@ -82,5 +82,5 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
 export default CreateEvent;
 
 function addEvent(newEvent: CalendarEvent) {
-    throw new Error('Function not implemented.');
+  throw new Error('Function not implemented.');
 }
