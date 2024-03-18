@@ -20,6 +20,7 @@ interface CalendarState {
 interface CalendarProps {
     currentDay: Date;
     events: CalendarEvent[];
+    onSelectDay: (events: CalendarEvent[]) => void;
   }
   
 
@@ -58,7 +59,10 @@ export default class Calendar extends Component<CalendarProps, CalendarState> {
                             })
                         }
                     </div>
-                    <CalendarDays day={currentDay} changeCurrentDay={this.changeCurrentDay} events={events} />
+                    <CalendarDays day={currentDay}
+    changeCurrentDay={this.changeCurrentDay}
+    events={events}
+    onSelectDay={this.props.onSelectDay}/>
                 </div>
             </div>
         );

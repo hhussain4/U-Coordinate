@@ -7,15 +7,32 @@
 }
 
 .create-event-btn {
-    margin-right: auto; /* Pushes the button to the right */
-    padding: 10px 20px; /* Adjust padding as needed */
-    /* Add more styling as needed for the button */
-    cursor: pointer;
+   /*
+    margin-right: auto; /* Pushes the button to the right 
+    padding: 10px 20px; /* Adjust padding as needed 
+    cursor: pointer; 
+    background-color: #F1ECE4; /* Example background color 
+    color: rgb(0, 0, 0); /* Example text color 
+    border: none;
+    border-radius: 5px; /* Rounded corners 
+    display: block; /* it takes its own line 
+    outline: 1px solid black; 
+    margin-bottom: 20px; /* adds space below button */ 
+    
+    width: 100px; /* Width of the button */
+    height: 40px; /* Height of the button */
+    margin: 10px auto 0 auto; /* 10px top margin, auto horizontal margins */
+    margin-left: 0px;
+    display: block; /* Necessary for auto margins to center the button */
     background-color: #F1ECE4; /* Example background color */
     color: rgb(0, 0, 0); /* Example text color */
     border: none;
     border-radius: 5px; /* Rounded corners */
-    outline: 1px solid black; 
+    outline: 1px solid black;
+    cursor: pointer;
+    text-align: center; /* Center the text inside the button */
+    line-height: 40px; /* Vertically center the text inside the button */
+    
 }
 
 .calendar {
@@ -40,8 +57,9 @@
 
 .calendar-container{
     display: flex; 
-    justify-content: flex-end; 
+    justify-content: flex-start; 
     width: 100%;
+   /* flex: 2; */
 }
 
 .calendar-header {

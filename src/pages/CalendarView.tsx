@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import Calendar from '../components/Calendar';
 import CreateEvent from '../components/CreateEvent';
+import EventDetails from '../components/EventDetails'; 
 
 //new code below helps define an event type 
 
@@ -23,9 +24,18 @@ interface CalendarEvent {
         const savedEvents = localStorage.getItem('events');
         return savedEvents ? JSON.parse(savedEvents) : [];
     });
+    //adding state to store the selected date's events
+    const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>([]);
+
+    
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
+
+    //below is a callback function that updates 'selectedDayEvents'
+    const handleSelectDay = (events: CalendarEvent[]) => {
+        setSelectedDayEvents(events);
+    };
 
     // Handler to add a new event
     const addEvent = (newEvent: CalendarEvent) => {
@@ -37,17 +47,25 @@ interface CalendarEvent {
         });
     };
 
+    
+
+    
+
     return (
         <>
-            <NavBar />
-            <div className="content-wrapper">
-                <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
-                <div className="calendar-container">
-                    <Calendar currentDay={currentDay} events={events} />
-                </div>
+        <NavBar />
+        <div className="content-wrapper">
+            {/* Split view: Left side for event details, right side for calendar */}
+            <div className="event-details-container">
+                <EventDetails events={selectedDayEvents} />
             </div>
-            <CreateEvent isOpen={isModalOpen} onClose={handleCloseModal} addEvent={addEvent} />
-        </>
+            <div className="calendar-container">
+                <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
+                <Calendar currentDay={currentDay} events={events} onSelectDay={handleSelectDay} />
+            </div>
+        </div>
+        <CreateEvent isOpen={isModalOpen} onClose={handleCloseModal} addEvent={addEvent} />
+    </>
     );
 };
 

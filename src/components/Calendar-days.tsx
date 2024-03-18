@@ -1,4 +1,4 @@
-interface CalendarEvent {
+export interface CalendarEvent {
     name: string;
     description: string;
     start: Date;
@@ -21,6 +21,7 @@ interface CalendarDaysProps {
     day: Date;
     events: CalendarEvent[];
     changeCurrentDay: (day: CalendarDay) => void;
+    onSelectDay: (events: CalendarEvent[]) => void; // New callback prop
 }
 
 const CalendarDays: React.FC<CalendarDaysProps> = (props) => {
@@ -58,6 +59,7 @@ const CalendarDays: React.FC<CalendarDaysProps> = (props) => {
 
     const handleDayClick = (day: CalendarDay) => {
         props.changeCurrentDay(day);
+        props.onSelectDay(day.events || []);
     }
 
     return (
