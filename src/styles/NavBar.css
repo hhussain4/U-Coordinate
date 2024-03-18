@@ -78,6 +78,6 @@
 }
 
 body.dark-mode {
-    background-color: darkgray;
-    color: #ffffff;
+    background-color: rgb(72, 71, 71);
+    color: #F1ECE4;
 }
