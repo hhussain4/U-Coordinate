@@ -22,8 +22,18 @@ const CalendarView: React.FC = () => {
         const savedEvents = localStorage.getItem('events');
         return savedEvents ? JSON.parse(savedEvents) : [];
     });
+
+    //filter for events that start today
+    const today = new Date();
+    const todayEvents = events.filter(event => {
+        const eventStart = new Date(event.start);
+        return eventStart.getDate() === today.getDate() &&
+            eventStart.getMonth() === today.getMonth() &&
+            eventStart.getFullYear() === today.getFullYear();
+    });
+
     //adding state to store the selected date's events
-    const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>([]);
+    const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>(todayEvents);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -46,9 +56,8 @@ const CalendarView: React.FC = () => {
     return (
         <>
             <div className="content-wrapper">
-                <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
-                {/* Split view: Left side for event details, right side for calendar */}
-                <div className="event-details-container">
+                <div className="event-container">
+                    <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
                     <EventDetails events={selectedDayEvents} />
                 </div>
                 <div className="calendar-container">

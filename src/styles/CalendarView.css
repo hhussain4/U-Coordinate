@@ -9,13 +9,15 @@
 
 .calendar-container {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .create-event-btn {
     width: 100px;
     height: 40px;
-    margin-top: 10px;
-    margin-left: 10px;
+    margin: 10px;
+    margin-left: 0px;
     display: block;
     /* Necessary for auto margins to center the button */
     background-color: #F1ECE4;
@@ -28,17 +30,13 @@
     outline: 1px solid black;
     cursor: pointer;
     text-align: center;
-    /* Center the text inside the button */
-    /* line-height: 40px; */
-    /* Vertically center the text inside the button */
 }
 
-.event-details-container {
+.event-container {
     /* Styles for the container itself */
-    flex: 5;
-    /* Adjust as needed */
-    margin-left: 40px;
-    margin-right: 40px;
+    flex: 1;
+    margin-left: 20px;
+    margin-right: 20px;
     /* Space between event details and calendar */
     width: 100%;
 }
