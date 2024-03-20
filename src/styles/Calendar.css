@@ -1,7 +1,7 @@
 .calendar {
-  max-width: 55%;
+  width: 100%;
   height: auto;
-  margin: 10px 0 10px auto;
+  margin: 10px 10px 10px 0;
   padding: 10px;
   /* Center the calendar horizontally */
   display: flex;
@@ -41,7 +41,7 @@
   justify-content: space-around;
 }
 
-.table-header h2{
+.table-header h2 {
   width: 100%;
   height: 10%;
   margin-bottom: 0;
@@ -49,12 +49,6 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-}
-
-.weekday {
-  width: 14%;
-  /* Adjust as needed for 7 days */
-  text-align: center;
 }
 
 .table-content {
@@ -66,6 +60,12 @@
   box-sizing: border-box;
 }
 
+.weekday {
+  width: 14%;
+  /* Adjust as needed for 7 days */
+  text-align: center;
+}
+
 .calendar-day {
   width: 14%;
   /* Adjust as needed for 7 days */
@@ -73,6 +73,7 @@
   position: relative;
   border: 1px solid #a6a6a6;
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 .calendar-day:hover {
@@ -86,104 +87,88 @@
   margin-top: 0;
 }
 
+.calendar-event-container {
+  margin-top: 14px;
+}
+
 .current p {
+  position: absolute;
+  right: 5px;
   color: #000000;
+  margin-top: 0;
 }
 
-.selected p {
+.today p {
   color: #cc0000;
-  font-weight: bold;
+  font-weight: bold
 }
 
-.create-event-btn {
-/*
-  margin-right: auto; /* Pushes the button to the right 
-  padding: 10px 20px; /* Adjust padding as needed 
-  cursor: pointer; 
-  background-color: #F1ECE4; /* Example background color 
-  color: rgb(0, 0, 0); /* Example text color 
-  border: none;
-  border-radius: 5px; /* Rounded corners 
-  display: block; /* it takes its own line 
-  outline: 1px solid black; 
-  margin-bottom: 20px; /* adds space below button */ 
-  
-  width: 100px; /* Width of the button */
-  height: 40px; /* Height of the button */
-  margin: 10px auto 0 auto; /* 10px top margin, auto horizontal margins */
-  margin-left: 0px;
-  display: block; /* Necessary for auto margins to center the button */
-  background-color: #F1ECE4; /* Example background color */
-  color: rgb(0, 0, 0); /* Example text color */
-  border: none;
-  border-radius: 5px; /* Rounded corners */
-  outline: 1px solid black;
-  cursor: pointer;
-  text-align: center; /* Center the text inside the button */
-  line-height: 40px; /* Vertically center the text inside the button */
+.selected,
+.selected:hover {
+  background-color: #c3f2f8;
 }
 
 body.dark-mode {
-    background-color: rgb(57, 54, 54);
-    color: #F1ECE4;
-  }
+  background-color: darkgray;
+  color: #ffffff;
+}
 
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-  
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #2196F3;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

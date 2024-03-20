@@ -1,24 +1,27 @@
-.event-details-container {
-    /* Styles for the container itself */
-    flex: 5; /* Adjust as needed */
-    margin-right: 40px; /* Space between event details and calendar */
-    width: 100%
-}
-
 .event-box {
-    margin-bottom: 20px;
+    display: grid;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 500px;
+
+    h3 {
+        margin: auto;
+        margin-bottom: 10px;
+    }
 }
 
-.event-name {
-    font-size: 1.2rem;
-    font-weight: bold;
+tr {
+    display: flex;
 }
 
-.event-description, .event-start, .event-end, .event-location, .event-users {
-    margin-top: 5px;
-    font-size: 1rem;
+td:first-child {
+    font-weight: bold;  
+    flex-shrink: 0;
+    margin-right: 5px;
+    text-align: right;
+    width: 90px;
+    white-space: nowrap;
 }

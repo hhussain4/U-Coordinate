@@ -17,10 +17,9 @@ interface CalendarState {
 }
 
 interface CalendarProps {
-    currentDay: Date;
     events: CalendarEvent[];
     onSelectDay: (events: CalendarEvent[]) => void;
-}  
+}
 
 export default class Calendar extends Component<CalendarProps, CalendarState> {
     private readonly weekdays: string[];
@@ -43,7 +42,6 @@ export default class Calendar extends Component<CalendarProps, CalendarState> {
     }
 
     render() {
-        const { currentDay, events } = this.props;
         return (
             <div className="calendar">
                 <div className="calendar-body">
@@ -57,10 +55,10 @@ export default class Calendar extends Component<CalendarProps, CalendarState> {
                             })
                         }
                     </div>
-                    <CalendarDays day={currentDay}
-                                changeCurrentDay={this.changeCurrentDay}
-                                events={events}
-                                onSelectDay={this.props.onSelectDay}/>
+                    <CalendarDays day={this.state.currentDay}
+                        changeCurrentDay={this.changeCurrentDay}
+                        events={this.props.events}
+                        onSelectDay={this.props.onSelectDay} />
                 </div>
             </div>
         );

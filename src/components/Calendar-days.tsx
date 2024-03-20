@@ -5,7 +5,7 @@ export interface CalendarEvent {
     end: Date;
     location: string;
     usersInvolved: string[];
-  }
+}
 
 export interface CalendarDay {
     currentMonth: boolean;
@@ -14,6 +14,7 @@ export interface CalendarDay {
     number: number;
     selected: boolean;
     year: number;
+    today: boolean;
     events?: CalendarEvent[];
 }
 
@@ -51,6 +52,7 @@ const CalendarDays: React.FC<CalendarDaysProps> = (props) => {
             number: firstDayOfMonth.getDate(),
             selected: (firstDayOfMonth.toDateString() === props.day.toDateString()),
             year: firstDayOfMonth.getFullYear(),
+            today: (firstDayOfMonth.toDateString() == new Date(new Date().setHours(0, 0, 0, 0)).toDateString()),
             events: dayEvents.length > 0 ? dayEvents : undefined
         };
 
@@ -67,15 +69,17 @@ const CalendarDays: React.FC<CalendarDaysProps> = (props) => {
             {currentDays.map((day, index) => (
                 <div
                     key={index}
-                    className={`calendar-day ${day.currentMonth ? " current" : ""} ${day.selected ? " selected" : ""}`}
+                    className={`calendar-day ${day.currentMonth ? "current" : ""} ${day.selected ? "selected" : ""} ${day.today ? "today" : ""}`}
                     onClick={() => handleDayClick(day)}
                 >
                     <p>{day.number}</p>
-                    {day.events && day.events.map((event, eventIndex) => (
-                        <div key={eventIndex} className="calendar-event">
-                            {event.name}
-                        </div>
-                    ))}
+                    <div className="calendar-event-container">
+                        {day.events && day.events.map((event, eventIndex) => (
+                            <div key={eventIndex} className="calendar-event">
+                                {event.name}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ))}
         </div>
