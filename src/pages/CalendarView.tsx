@@ -23,6 +23,9 @@ const CalendarView: React.FC = () => {
         return savedEvents ? JSON.parse(savedEvents) : [];
     });
 
+    // sort the events by start dates
+    events.sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
+
     //filter for events that start today
     const today = new Date();
     const todayEvents = events.filter(event => {
