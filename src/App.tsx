@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Calendar from '@pages/CalendarView';
 import NotFound from '@pages/NotFound';
 import NavBar from '@components/NavBar';
+import Login from '@components/Login'; 
+import Register from '@components/Register';
 
 function App() {
   return (
@@ -9,7 +11,9 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route index element={<Calendar />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route element={<Calendar />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

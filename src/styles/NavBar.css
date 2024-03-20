@@ -77,7 +77,14 @@
     background-color: #ddd;
 }
 
-body.dark-mode {
-    background-color: rgb(72, 71, 71);
-    color: #F1ECE4;
-}
+/* Dark mode styles */
+.dark-mode .navbar {
+    background-color: #333;
+    color: #fff;
+    /* Additional styles for navbar in dark mode */
+  }
+
+.login-button {
+    margin-left: auto; /* This will push the login button to the right */
+    margin-right: 200px;
+  }

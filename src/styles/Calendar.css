@@ -108,19 +108,18 @@
   outline: 1px solid black; 
   margin-bottom: 20px; /* adds space below button */ 
   
-  width: 100px; /* Width of the button */
+  width: fit-content; /* Adjusts the width based on the content */
   height: 40px; /* Height of the button */
   margin: 10px auto 0 auto; /* 10px top margin, auto horizontal margins */
-  margin-left: 0px;
-  display: block; /* Necessary for auto margins to center the button */
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
   background-color: #F1ECE4; /* Example background color */
   color: rgb(0, 0, 0); /* Example text color */
   border: none;
   border-radius: 5px; /* Rounded corners */
   outline: 1px solid black;
   cursor: pointer;
-  text-align: center; /* Center the text inside the button */
-  line-height: 40px; /* Vertically center the text inside the button */
 }
 
 body.dark-mode {

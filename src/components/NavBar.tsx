@@ -1,5 +1,6 @@
 import DarkModeToggle from '@components/DarkMode'
 import '@styles/NavBar.css'
+import { Link } from 'react-router-dom';
 
 const NavBar: React.FC = () => {
     return (
@@ -17,6 +18,8 @@ const NavBar: React.FC = () => {
             <img src='../../logo.png'></img>
             {/* Add navigation elements here */}
             <DarkModeToggle />
+            <div className="login-button"><Link to="/">Login</Link></div>
+            
         </div>
     );
 }
