@@ -1,19 +1,9 @@
 import { useState } from 'react';
 import Calendar from '@components/Calendar';
+import { CalendarEvent } from '@components/Calendar-days';
 import CreateEvent from '@components/CreateEvent';
 import EventDetails from '@components/EventDetails';
 import '@styles/CalendarView.css';
-
-//new code below helps define an event type 
-
-interface CalendarEvent {
-    name: string;
-    description: string;
-    start: Date;
-    end: Date;
-    location: string;
-    usersInvolved: string[];
-}
 
 const CalendarView: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
