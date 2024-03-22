@@ -5,6 +5,7 @@
 .title {
     display: inline-block;
     margin-top: 10px;
+    padding-left: 35px;
 }
 
 .create-button {
@@ -26,5 +27,34 @@
 
 .group-list {
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 45px;
+    height: auto;
+    padding: 0 30px 30px 10px;
+}
+
+.group {
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 250px;
+}
+
+.group-name {
+    border-bottom: 2px solid black;
+    border-radius: 10px 10px 0 0;
+    background-color: #f1ece4;
+    padding: 10px;
+    font-size: large;
+    font-weight: bold;
+    overflow-wrap: break-word;
+}
+
+.group-members {
+    padding: 10px;
+}
+
+.empty {
+    color: gray;
+    display: flex;
+    justify-content: center;
 }

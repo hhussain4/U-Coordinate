@@ -19,11 +19,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events }) => {
             </tr>
             <tr>
               <td>Start:</td>
-              <td>{new Date(event.start).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</td>
+              <td>{formatDate(new Date(event.start), new Date(event.end))}</td>
             </tr>
             <tr>
               <td>End:</td>
-              <td>{new Date(event.end).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</td>
+              <td>{formatDate(new Date(event.end), new Date(event.start))}</td>
             </tr>
             <tr>
               <td>Location:</td>
@@ -39,5 +39,18 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events }) => {
     </div>
   );
 };
+
+function formatDate(date: Date, compareDate: Date) {
+  let dateString = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+  // if the dates do not fall on the same day
+  if (date.getDate() != compareDate.getDate() ||
+    date.getMonth() != compareDate.getMonth() ||
+    date.getFullYear() != compareDate.getFullYear()) {
+    dateString = `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at ${dateString}`;
+  }
+
+  return dateString;
+}
 
 export default EventDetails;

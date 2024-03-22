@@ -52,7 +52,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
     //checking for valid inputs
     const startDate = new Date(start);
     const endDate = new Date(end);
-    if (start > end) {
+    if (start >= end) {
       errorMsg.time = "Please provide a valid time range";
     }
 
@@ -66,7 +66,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
         start: startDate,
         end: endDate,
         location: location,
-        usersInvolved: users.replaceAll(" +", " ").split(',' || " "),
+        usersInvolved: users.split(', '),
       };
       addEvent(newEvent);
       onClose();

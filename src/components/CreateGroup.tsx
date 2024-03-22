@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Group } from "@classes/Group";
+import { User } from "@classes/User";
 import '@styles/CreateForm.css';
 
 interface CreateGroupProps {
     isOpen: boolean;
     onClose: () => void;
+    addGroup: (group: Group) => void;
 }
 
 interface ErrorData {
@@ -13,7 +15,7 @@ interface ErrorData {
     members: string;
 }
 
-const CreateGroup: React.FC<CreateGroupProps> = ({ isOpen, onClose }) => {
+const CreateGroup: React.FC<CreateGroupProps> = ({ isOpen, onClose, addGroup }) => {
     if (!isOpen) return null;
 
     const [errors, setErrors] = useState<ErrorData>({ name: "", admins: "", members: "" });
@@ -38,11 +40,16 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ isOpen, onClose }) => {
             errorMsg.members = "Please provide at least one username";
         }
 
+        // TODO: check if usernames are in the database and retrieve those users
+        const adminList = admins.replaceAll(' ', '').split(",").map((admin) => new User(admin, admin));
+        const memberList = members.replaceAll(' ', '').split(",").map((member) => new User(member, member));
+
         setErrors(errorMsg);
 
         //only submit if there are no errors
         if (Object.values(errorMsg).every((error) => !error)) {
-            const group = new Group(name);
+            const group = new Group(name, adminList, memberList);
+            addGroup(group);
             onClose();
         }
     }

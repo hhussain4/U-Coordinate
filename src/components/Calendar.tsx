@@ -41,8 +41,8 @@ export default class Calendar extends Component<CalendarProps, CalendarState> {
                     </div>
                     <div className="table-header">
                         {
-                            this.weekdays.map((weekday) => {
-                                return <div className="weekday"><p>{weekday}</p></div>
+                            this.weekdays.map((weekday, index) => {
+                                return <div className="weekday" key={index}><p>{weekday}</p></div>
                             })
                         }
                     </div>
