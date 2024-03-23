@@ -4,8 +4,8 @@ import NotFound from '@pages/NotFound';
 import NavBar from '@components/NavBar';
 import GroupView from '@pages/GroupView';
 import Support from '@pages/Support';
-import Login from '@components/Login'; 
-import Register from '@components/Register';
+import Login from '@pages/Login';
+import Register from '@pages/Register';
 
 function App() {
   return (
@@ -13,9 +13,8 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route index element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route element={<Calendar />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/groups" element={<GroupView />} />
           <Route path="/support" element={<Support />} />

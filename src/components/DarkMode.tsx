@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const DarkModeToggle: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);

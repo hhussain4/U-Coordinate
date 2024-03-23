@@ -1,74 +1,65 @@
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .register-box {
-    background-color: #F1ECE4;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-  
-  .register-btn {
-    background-color: #441eb6;
-    color: white;
-    padding: 10px 20px;
-    margin-right: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .register-btn:hover {
-    background-color: #d2c6f6;
-  }
-  
-  .register-field {
-    border-color: #441eb6;
-  }
-  
+.register-box {
+  background-color: #F1ECE4;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.register-btn {
+  background-color: #441eb6;
+  color: white;
+  padding: 10px 20px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #d2c6f6;
+}
+
+.register-field {
+  border-color: #441eb6;
+}
+
 /* Default light mode styles above */
 
-  
- 
-  .dark-mode .register-box {
-    background-color: #333;
-    color: #fff;
-    
-  }
-  
+.dark-mode .register-box {
+  background-color: #333;
+  color: #fff;
 
-  
+}
 
- 
-  .dark-mode input,textarea{
-    background-color: #333;
-  }
+.dark-mode input,
+textarea {
+  background-color: #333;
+}
 
-
-  
-  /* Add more dark mode styles as needed */
-  
+/* Add more dark mode styles as needed */

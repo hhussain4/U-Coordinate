@@ -48,7 +48,7 @@ form>label>textarea {
 }
 
 .err-msg {
-  color:red;
+  color: red;
 }
 
 button[type="submit"] {
