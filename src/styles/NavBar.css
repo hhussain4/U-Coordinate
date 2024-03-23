@@ -77,11 +77,22 @@
     background-color: #ddd;
 }
 
-body.dark-mode {
-    background-color: darkgray;
-    color: #ffffff;
+/* Dark mode styles */
+.dark-mode .navbar {
+    background-color: #232D3F;
+    color: #fff;
+    /* Additional styles for navbar in dark mode */
+  }
+
+.login-button {
+    margin-left: auto; /* This will push the login button to the right */
+    margin-right: 200px;
+  }
+
+.dark-mode .dropdown-content{
+    background-color: #005B41;
 }
 
-.dark-mode-toggle {
-    margin-left: auto;
+.dark-mode .dropbtn{
+    background-color: #232D3F;
 }

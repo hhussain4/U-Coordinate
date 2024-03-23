@@ -103,13 +103,14 @@
   font-weight: bold
 }
 
+
 .selected,
 .selected:hover {
   background-color: #c3f2f8;
 }
 
 body.dark-mode {
-  background-color: darkgray;
+  background-color: #35374B;
   color: #ffffff;
 }
 
@@ -151,11 +152,11 @@ body.dark-mode {
 }
 
 input:checked+.slider {
-  background-color: #2196F3;
+  background-color: #005B41;
 }
 
 input:focus+.slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #005B41;
 }
 
 input:checked+.slider:before {

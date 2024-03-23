@@ -1,17 +1,11 @@
-import { useState } from 'react';
-
+import React, { useState } from 'react';
 
 const DarkModeToggle: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-
-    // Apply CSS class to toggle dark mode
-    const mode = newMode ? 'dark' : 'light';
-    document.body.classList.remove('light-mode', 'dark-mode');
-    document.body.classList.add(`${mode}-mode`);
+    setDarkMode(prevMode => !prevMode);
+    document.body.classList.toggle('dark-mode'); // Toggle dark mode class on any element in css by calling '.dark-mode' in front of it
   };
 
   return (
