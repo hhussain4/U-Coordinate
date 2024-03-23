@@ -1,15 +1,15 @@
 export class User {
     private username: string;
     private displayName: string;
-    private theme: string;
     private timezone: string;
+    private theme: string;
     private privilege: boolean;
 
-    constructor(username:string, displayName: string, theme: string, timezone:string, privilege:boolean = false) {
+    constructor(username:string, displayName: string, timezone:string = "", theme: string = "light", privilege:boolean = false) {
         this.username = username;
         this.displayName = displayName;
-        this.theme = theme;
         this.timezone = timezone;
+        this.theme = theme;
         this.privilege = privilege;
     }
     
@@ -17,8 +17,8 @@ export class User {
         return {
             username: this.username,
             displayName: this.displayName,
-            theme: this.theme,
             timezone: this.timezone,
+            theme: this.theme,
             privilege: this.privilege
         }
     }
@@ -32,12 +32,12 @@ export class User {
         return this.displayName;
     }
 
-    getTheme(): string {
-        return this.theme;
-    }
-
     getTimezone(): string {
         return this.timezone;
+    }
+
+    getTheme(): string {
+        return this.theme;
     }
 
     getPrivilege(): boolean {
@@ -53,17 +53,15 @@ export class User {
         this.displayName = displayName;
     }
 
-    setTheme(theme: string) {
-        this.theme = theme;
-    }
-
     setTimezone(timezone: string) {
         this.timezone = timezone;
+    }
+
+    setTheme(theme: string) {
+        this.theme = theme;
     }
 
     setPrivilege(privilege: boolean) {
         this.privilege = privilege;
     }
 }
-
-module.exports = User;

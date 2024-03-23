@@ -11,8 +11,8 @@ const NavBar: React.FC = () => {
                 </button>
                 <div className="dropdown-content">
                     <a href="./calendar">Calendar</a>
-                    <a href="#">Option 2</a>
-                    <a href="#">Option 3</a>
+                    <a href="./groups">Groups</a>
+                    <a href="./support">Support</a>
                 </div>
             </div>
             <img src='../../logo.png'></img>

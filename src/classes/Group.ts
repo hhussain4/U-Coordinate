@@ -5,10 +5,19 @@ export class Group {
     private members: User[];
     private admins: User[];
 
-    constructor(name:string, members?: User[], admins?: User[]) {
+    constructor(name:string, admins?: User[], members?: User[]) {
         this.name = name;
-        this.members = members || [];
         this.admins = admins || [];
+        this.members = members || [];
+    }
+
+    addAdmin(admin: User) {
+        if(!this.admins.includes(admin)) this.admins.push(admin);
+        if (this.members.includes(admin)) this.removeMember(admin);
+    }
+
+    removeAdmin(admin: User) {
+        if(this.admins.includes(admin)) this.admins.splice(this.admins.indexOf(admin), 1);
     }
 
     addMember(member: User) {
@@ -19,26 +28,17 @@ export class Group {
         if(this.members.includes(member)) this.members.splice(this.members.indexOf(member), 1);
     }
 
-    addAdmin(admin: User) {
-        if(!this.admins.includes(admin)) this.admins.push(admin);
-        if (!this.members.includes(admin)) this.members.push(admin);
-    }
-
-    removeAdmin(admin: User) {
-        if(this.admins.includes(admin)) this.admins.splice(this.admins.indexOf(admin), 1);
-    }
-
     // getters
     getName() {
         return this.name;
     }
 
-    getMembers() {
-        return this.members;
-    }
-
     getAdmins() {
         return this.admins;
+    }
+    
+    getMembers() {
+        return this.members;
     }
 
     // setters
@@ -46,14 +46,12 @@ export class Group {
         this.name = name;
     }
 
-    setMembers(members: User[]) {
-        this.members = members;
-    }
-
     setAdmins(admins: User[]) {
         this.admins = admins;
     }
 
-}
+    setMembers(members: User[]) {
+        this.members = members;
+    }
 
-module.exports = Group;
+}

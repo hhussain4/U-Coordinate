@@ -1,16 +1,7 @@
 import { Component } from 'react';
-import CalendarDays, { CalendarDay } from './Calendar-days';
+import CalendarDays, { CalendarDay, CalendarEvent } from './Calendar-days';
 import '@styles/Calendar.css';
 import '@pages/CalendarView';
-
-interface CalendarEvent {
-    name: string;
-    description: string;
-    start: Date;
-    end: Date;
-    location: string;
-    usersInvolved: string[];
-}
 
 interface CalendarState {
     currentDay: Date;
@@ -50,8 +41,8 @@ export default class Calendar extends Component<CalendarProps, CalendarState> {
                     </div>
                     <div className="table-header">
                         {
-                            this.weekdays.map((weekday) => {
-                                return <div className="weekday"><p>{weekday}</p></div>
+                            this.weekdays.map((weekday, index) => {
+                                return <div className="weekday" key={index}><p>{weekday}</p></div>
                             })
                         }
                     </div>
