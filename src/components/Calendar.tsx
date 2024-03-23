@@ -1,28 +1,16 @@
 import { Component } from 'react';
-import CalendarDays, { CalendarDay } from './Calendar-days';
-import './Calendar.css';
-import '../pages/CalendarView';
-
-interface CalendarEvent {
-    name: string;
-    description: string;
-    start: Date;
-    end: Date;
-    location: string;
-    usersInvolved: string[];
-}
-
+import CalendarDays, { CalendarDay, CalendarEvent } from './Calendar-days';
+import '@styles/Calendar.css';
+import '@pages/CalendarView';
 
 interface CalendarState {
     currentDay: Date;
 }
 
 interface CalendarProps {
-    currentDay: Date;
     events: CalendarEvent[];
     onSelectDay: (events: CalendarEvent[]) => void;
-  }
-  
+}
 
 export default class Calendar extends Component<CalendarProps, CalendarState> {
     private readonly weekdays: string[];
@@ -45,24 +33,23 @@ export default class Calendar extends Component<CalendarProps, CalendarState> {
     }
 
     render() {
-        const { currentDay, events } = this.props;
         return (
             <div className="calendar">
-                <div className="calendar-header">
-                    <h2>{this.months[this.state.currentDay.getMonth()]} {this.state.currentDay.getFullYear()}</h2>
-                </div>
                 <div className="calendar-body">
                     <div className="table-header">
+                        <h2>{this.months[this.state.currentDay.getMonth()]} {this.state.currentDay.getFullYear()}</h2>
+                    </div>
+                    <div className="table-header">
                         {
-                            this.weekdays.map((weekday) => {
-                                return <div className="weekday"><p>{weekday}</p></div>
+                            this.weekdays.map((weekday, index) => {
+                                return <div className="weekday" key={index}><p>{weekday}</p></div>
                             })
                         }
                     </div>
-                    <CalendarDays day={currentDay}
-    changeCurrentDay={this.changeCurrentDay}
-    events={events}
-    onSelectDay={this.props.onSelectDay}/>
+                    <CalendarDays day={this.state.currentDay}
+                        changeCurrentDay={this.changeCurrentDay}
+                        events={this.props.events}
+                        onSelectDay={this.props.onSelectDay} />
                 </div>
             </div>
         );

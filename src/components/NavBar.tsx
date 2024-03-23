@@ -1,4 +1,5 @@
-import './NavBar.css'
+import DarkModeToggle from '@components/DarkMode'
+import '@styles/NavBar.css'
 
 const NavBar: React.FC = () => {
     return (
@@ -9,12 +10,14 @@ const NavBar: React.FC = () => {
                 </button>
                 <div className="dropdown-content">
                     <a href="./calendar">Calendar</a>
-                    <a href="#">Option 2</a>
-                    <a href="#">Option 3</a>
+                    <a href="./groups">Groups</a>
+                    <a href="./support">Support</a>
                 </div>
             </div>
             <img src='../../logo.png'></img>
-            {/* Add navigation elements here */}
+            <div className='dark-mode-toggle'>
+                <DarkModeToggle />
+            </div>
         </div>
     );
 }
