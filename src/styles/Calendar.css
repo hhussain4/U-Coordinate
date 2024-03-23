@@ -103,38 +103,14 @@
   font-weight: bold
 }
 
-.create-event-btn {
-/*
-  margin-right: auto; /* Pushes the button to the right 
-  padding: 10px 20px; /* Adjust padding as needed 
-  cursor: pointer; 
-  background-color: #F1ECE4; /* Example background color 
-  color: rgb(0, 0, 0); /* Example text color 
-  border: none;
-  border-radius: 5px; /* Rounded corners 
-  display: block; /* it takes its own line 
-  outline: 1px solid black; 
-  margin-bottom: 20px; /* adds space below button */ 
-  
-  width: fit-content; /* Adjusts the width based on the content */
-  height: 40px; /* Height of the button */
-  margin: 10px auto 0 auto; /* 10px top margin, auto horizontal margins */
-  display: flex; /* Use flexbox for centering */
-  justify-content: center; /* Center the text horizontally */
-  align-items: center; /* Center the text vertically */
-  background-color: #F1ECE4; /* Example background color */
-  color: rgb(0, 0, 0); /* Example text color */
-  border: none;
-  border-radius: 5px; /* Rounded corners */
-  outline: 1px solid black;
-  cursor: pointer;
+
 .selected,
 .selected:hover {
   background-color: #c3f2f8;
 }
 
 body.dark-mode {
-  background-color: darkgray;
+  background-color: #35374B;
   color: #ffffff;
 }
 
@@ -176,11 +152,11 @@ body.dark-mode {
 }
 
 input:checked+.slider {
-  background-color: #2196F3;
+  background-color: #005B41;
 }
 
 input:focus+.slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #005B41;
 }
 
 input:checked+.slider:before {

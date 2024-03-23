@@ -18,6 +18,10 @@
     max-width: 500px;
     width: 100%;
   }
+
+ .dark-mode .modal {
+  background-color: #232D3F;
+ }
   
   .modal-close-btn {
     float: right;
@@ -35,6 +39,11 @@
     width: 100%;
     margin-top: 5px;
   }
+
+ .dark-mode form > label > input,
+  form > label > textarea {
+   border-color: #232D3F;
+  }
   
   button {
     cursor: pointer;
@@ -44,4 +53,8 @@
     border: none;
     border-radius: 5px;
     margin-top: 10px;
+  }
+
+  .dark-mode .button {
+    background-color: #005B41;
   }

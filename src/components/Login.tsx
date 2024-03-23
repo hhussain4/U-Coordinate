@@ -57,7 +57,7 @@ export const Login = () => {
           </div>
           <div className="form-group">
             <input 
-              className='register-field' 
+              className='password-field' 
               type="password" 
               id="password" 
               name="password" 
@@ -68,7 +68,7 @@ export const Login = () => {
 
           <div>
             <Link to='/calendar'><button onClick={signIn} className='login-btn' type="button">Log in</button></Link> 
-            <Link to="/register"><button className='register-btn' type="button">Register</button></Link>
+            <Link to="/register"><button className='register-btn-login' type="button">Register</button></Link>
             <button onClick={logOut} className='logout-btn' type="button">Log out</button>
           </div>
         </form>

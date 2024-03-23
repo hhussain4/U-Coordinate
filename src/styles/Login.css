@@ -31,7 +31,7 @@
   }
   
   .login-btn,
-  .register-btn,
+  .register-btn-login,
   .logout-btn {
     background-color: #441eb6;
     color: white;
@@ -42,28 +42,36 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  
+
+
+  .dark-mode .login-btn,
+  .dark-mode .register-btn-login,
+  .dark-mode .logout-btn {
+    background-color: #005B41;
+  }
+
   button:hover {
-    background-color: #d2c6f6;
+    background-color: #5F374B;
+  }
+
+  .dark-mode button:hover{
+    background-color: #008170;
   }
   
   .login-field,
-  .register-field {
-    border-color: #441eb6;
+  .password-field {
+    border-color: #232D3F;
   }
   
-  /* Add styles for changing border color when focused */
-  .login-field:focus,
-  .register-field:focus {
-    border-color: purple; /* Change border color to purple when focused */
-  }
+ 
+  
 
   .dark-mode input,textarea{
     background-color: #333;
   }
 
   .dark-mode .login-box {
-    background-color: #333;
+    background-color: #232D3F;
     color: #fff;
     
   }
