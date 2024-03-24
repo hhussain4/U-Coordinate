@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '@styles/NavBar.css';
 
 const DarkModeToggle: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);

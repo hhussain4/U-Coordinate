@@ -18,17 +18,17 @@
     margin: 10px;
     margin-left: 0px;
     display: block;
-    /* Necessary for auto margins to center the button */
-    background-color: #F1ECE4;
-    /* Example background color */
-    color: rgb(0, 0, 0);
-    /* Example text color */
+    
+    background-color: #007bff;
+    color: white;
     border: none;
     border-radius: 5px;
-    /* Rounded corners */
-    outline: 1px solid black;
     cursor: pointer;
     text-align: center;
+
+    &:hover {
+        background-color: #0069d9;
+    }
 }
 
 .event-container {
@@ -38,4 +38,8 @@
     margin-right: 20px;
     /* Space between event details and calendar */
     width: 100%;
+}
+
+.dark-mode .create-event-btn {
+    background-color: #005B41;
 }

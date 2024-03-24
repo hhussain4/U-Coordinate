@@ -1,18 +1,53 @@
 import { useState } from 'react';
 import { auth } from '../config/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 import '@styles/Register.css';
 
+interface ErrorData {
+  email: string;
+  password: string;
+  name: string;
+  timezone: string;
+}
 const Register: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [error, setError] = useState<ErrorData>({ email: "", password: "", name: "", timezone: "" });
 
-  const register = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.error(err)
+  const register = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errorMsg: ErrorData = { email: "", password: "", name: "", timezone: "" };
+    
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+    const password = (form.elements.namedItem('password') as HTMLInputElement).value.trim();
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
+    const timezone = (form.elements.namedItem('timezone') as HTMLInputElement).value.trim();
+
+    // TODO: validate timezone and password
+    if (!validateEmail(email)) {
+      errorMsg.email = "Please enter a valid email";
+    }
+    if (!password) {
+      errorMsg.password = "Please enter a password";
+    }
+    if (!validateName(name)) {
+      errorMsg.name = "Please enter a valid name";
+    }
+    if (!timezone) {
+      errorMsg.timezone = "Please choose a timezone";
+    }
+
+    setError(errorMsg);
+
+    // only register if there are no errors
+    if (Object.values(errorMsg).every((error) => !error)) {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        navigate("../");
+      } catch (err) {
+        console.error(err)
+      }
     }
   };
 
@@ -20,55 +55,50 @@ const Register: React.FC = () => {
     <div className="register-container">
       <div className="register-box">
         <h2>Register</h2>
-        {error && <div className="error-message">{error}</div>}
-        <form>
-          <div className="form-group">
+        <form onSubmit={register} >
+          <label>
             <input
               className='register-field'
               type="text"
               id="email"
               name="email"
               placeholder='Email'
-              onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
-          <div className="form-group">
+            {error.email && <div className="error-message">{error.email}</div>}
+          </label>
+          <label>
             <input
               className='register-field'
               type="password"
               id="password"
               name="password"
               placeholder='Password'
-              onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
+            {error.password && <div className="error-message">{error.password}</div>}
+          </label>
 
-          <div className="form-group">
+          <label>
             <input
               className='register-field'
               type="text"
               id="name"
               name="name"
               placeholder='Name'
-
             />
-          </div>
+            {error.name && <div className="error-message">{error.name}</div>}
+          </label>
 
-          <div className="form-group">
+          <label>
             <input
               className='register-field'
               type="text"
               id="timezone"
               name="timezone"
               placeholder='Timezone'
-
             />
-
-          </div>
-
-          <div>
-            <button onClick={register} className='register-btn' type="button">Register</button>
-          </div>
+            {error.timezone && <div className="error-message">{error.timezone}</div>}
+          </label>
+          <button className='register-btn' type="submit">Register</button>
         </form>
       </div>
     </div>
@@ -76,3 +106,13 @@ const Register: React.FC = () => {
 };
 
 export default Register;
+
+function validateEmail(email: string) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function validateName(name: string) {
+  const nameRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9_\-]*/;
+  return nameRegex.test(name);
+}

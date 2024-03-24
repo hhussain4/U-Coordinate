@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
 }
 
 .register-box {
@@ -11,15 +11,12 @@
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  width: 250px;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
+form>label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 input {
@@ -42,24 +39,30 @@ input {
 }
 
 .register-btn:hover {
-  background-color: #d2c6f6;
+  background-color: #5f38d3;
 }
 
 .register-field {
-  border-color: #441eb6;
+  border-color: #232D3F;
+}
+
+.error-message {
+  color: red;
 }
 
 /* Default light mode styles above */
 
-.dark-mode .register-box {
-  background-color: #333;
-  color: #fff;
+.dark-mode {
+  .register-box {
+    background-color: #232D3F;
+    color: #fff;
+  }
+  
+  .register-btn {
+    background-color: #005B41;
+  }
 
+  textarea {
+    background-color: #333;
+  }
 }
-
-.dark-mode input,
-textarea {
-  background-color: #333;
-}
-
-/* Add more dark mode styles as needed */

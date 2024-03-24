@@ -3,10 +3,12 @@ import { auth } from '../config/firebase';
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { User } from 'firebase/auth';
 import firebase from 'firebase/compat';
+import { useNavigate } from 'react-router-dom';
 import '@styles/Login.css';
 import { Link } from 'react-router-dom';
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null)
@@ -25,11 +27,12 @@ export const Login = () => {
   }, []);
 
   const signIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.error("Error signing in", err);
-    }
+    await signInWithEmailAndPassword(auth, email, password).then((userCredential) =>  {
+      console.log(userCredential);
+      navigate("./calendar");
+    }).catch((error) => {
+      console.log("Could not log in");
+    });
   };
 
   const logOut = async () => {
@@ -45,7 +48,7 @@ export const Login = () => {
       <div className="login-box">
         <h2>U-Coordinate</h2>
         <form>
-          <div className="form-group">
+          <label>
             <input
               className='login-field'
               type="text"
@@ -54,8 +57,8 @@ export const Login = () => {
               placeholder='Email'
               onChange={(e) => setEmail(e.target.value)}
             />
-          </div>
-          <div className="form-group">
+          </label>
+          <label>
             <input
               className='password-field'
               type="password"
@@ -64,10 +67,9 @@ export const Login = () => {
               placeholder='Password'
               onChange={(e) => setPassword(e.target.value)}
             />
-          </div>
-
+          </label>
           <div>
-            <Link to='/calendar'><button onClick={signIn} className='login-btn' type="button">Log in</button></Link>
+            <button onClick={signIn} className='login-btn' type="button">Log in</button>
             <Link to="/register"><button className='register-btn-login' type="button">Register</button></Link>
             <button onClick={logOut} className='logout-btn' type="button">Log out</button>
           </div>

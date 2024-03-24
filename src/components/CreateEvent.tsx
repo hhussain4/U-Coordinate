@@ -108,7 +108,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
             <input type="text" name="users" />
             {errors.users && <div className="err-msg">{errors.users}</div>}
           </label>
-          <button type="submit">Submit</button>
+          <button className="submit-button" type="submit">Submit</button>
         </form>
       </div>
     </div>
