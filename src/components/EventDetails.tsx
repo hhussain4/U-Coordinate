@@ -9,14 +9,14 @@ interface EventDetailsProps {
   onDelete: (event: CalendarEvent) => void; 
 }
 
-const EventDetails: React.FC<EventDetailsProps> = ({ events }) => {
-  function onEdit(event: CalendarEvent): void {
-    throw new Error('Function not implemented.');
+const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete }) => {
+  /* function onEdit(event: CalendarEvent): void {
+     throw new Error('Function not implemented.');
   }
 
   function onDelete(event: CalendarEvent): void {
     throw new Error('Function not implemented.');
-  }
+  }  */
 
   return (
     <div className="event-details">

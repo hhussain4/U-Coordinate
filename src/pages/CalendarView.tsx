@@ -53,13 +53,12 @@ const CalendarView: React.FC = () => {
 
     const handleDeleteEvent = (eventToDelete: CalendarEvent) => {
         setEvents((prevEvents) => {
-          // Filter out the event to delete
           const updatedEvents = prevEvents.filter(event => event !== eventToDelete);
-          // Save updated events to local storage
           localStorage.setItem('events', JSON.stringify(updatedEvents));
           return updatedEvents;
         });
-      };
+        setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
+    };
 
     return (
         <>
