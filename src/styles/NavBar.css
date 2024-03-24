@@ -142,6 +142,7 @@ body.dark-mode {
 
     .dropbtn {
         background-color: #232D3F;
+        color: lightgray;
     }
 
     .user-button {

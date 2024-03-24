@@ -6,6 +6,7 @@ import GroupView from '@pages/GroupView';
 import Support from '@pages/Support';
 import Login from '@pages/Login';
 import Register from '@pages/Register';
+import Settings from '@pages/Settings';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/groups" element={<GroupView />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/support" element={<Support />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
