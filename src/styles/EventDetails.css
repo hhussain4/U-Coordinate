@@ -18,10 +18,17 @@ tr {
 }
 
 td:first-child {
-    font-weight: bold;  
+    font-weight: bold;
     flex-shrink: 0;
     margin-right: 5px;
     text-align: right;
     width: 90px;
     white-space: nowrap;
+}
+
+.dark-mode {
+    .event-box {
+        background-color: rgb(96 98 128);
+        border-color: rgb(86, 86, 86);
+    }
 }

@@ -4,15 +4,30 @@ import { CalendarEvent } from './Calendar-days';
 
 interface EventDetailsProps {
   events: CalendarEvent[];
+  //below I added the new props for editing and deleting events/event details. 
+  onEdit: (event: CalendarEvent) => void; 
+  onDelete: (event: CalendarEvent) => void; 
 }
 
-const EventDetails: React.FC<EventDetailsProps> = ({ events }) => {
+const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete }) => {
+  /* function onEdit(event: CalendarEvent): void {
+     throw new Error('Function not implemented.');
+  }
+
+  function onDelete(event: CalendarEvent): void {
+    throw new Error('Function not implemented.');
+  }  */
+
   return (
     <div className="event-details">
       {events.map((event, index) => (
         <div key={index} className="event-box">
           <h3>{event.name}</h3>
           <table>
+            <tr>
+              <button className="EventDetailsBtn" onClick={() => onEdit(event)}> Edit </button>
+              <button className="EventDetailsBtn" onClick={() => onDelete(event)}> Delete </button>
+            </tr>
             <tr>
               <td>Description:</td>
               <td>{event.description}</td>

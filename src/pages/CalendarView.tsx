@@ -46,12 +46,26 @@ const CalendarView: React.FC = () => {
         });
     };
 
+    //below are methods to handle editing and deleting events
+    const handleEditEvent = (eventToEdit: CalendarEvent) => {
+        // Implement code for edit functionality here
+      };
+
+    const handleDeleteEvent = (eventToDelete: CalendarEvent) => {
+        setEvents((prevEvents) => {
+          const updatedEvents = prevEvents.filter(event => event !== eventToDelete);
+          localStorage.setItem('events', JSON.stringify(updatedEvents));
+          return updatedEvents;
+        });
+        setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
+    };
+
     return (
         <>
             <div className="content-wrapper">
                 <div className="event-container">
                     <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
-                    <EventDetails events={selectedDayEvents} />
+                    <EventDetails events={selectedDayEvents} onEdit={handleEditEvent} onDelete={handleDeleteEvent} />
                 </div>
                 <div className="calendar-container">
                     <Calendar events={events} onSelectDay={handleSelectDay} />

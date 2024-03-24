@@ -75,7 +75,7 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ isOpen, onClose, addGroup }) 
                         <input type="text" name="members" />
                         {errors.members && <div className="err-msg">{errors.members}</div>}
                     </label>
-                    <button type="submit">Submit</button>
+                    <button className="submit-button" type="submit">Submit</button>
                 </form>
             </div>
         </div>
