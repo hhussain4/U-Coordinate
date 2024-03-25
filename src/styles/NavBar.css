@@ -89,6 +89,7 @@
     background-color: lightgray;
     border: black;
     border-radius: 50%;
+    cursor: pointer;
     margin: 0 5px;
     padding: 8px 10px;
 }
