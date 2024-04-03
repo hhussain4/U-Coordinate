@@ -1,8 +1,14 @@
 import DarkModeToggle from '@components/DarkMode'
 import { useState, useEffect, useRef } from 'react';
+import { User, signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
 import '@styles/NavBar.css'
 
-const NavBar: React.FC = () => {
+interface NavBarProps {
+    user: User | null;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ user }) => {
     const [open, setOpen] = useState(false);
     const handleDropdown = () => setOpen(!open);
     
@@ -20,6 +26,17 @@ const NavBar: React.FC = () => {
             document.removeEventListener('mousedown', closeDropdown);
         }
     });
+
+    const logout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        try {
+            await signOut(auth);
+            window.location.href = '/';
+            console.log("Signed out");
+        } catch {
+            console.log("Error while signing out");
+        }
+    }
 
     return (
         <div className="navbar">
@@ -39,12 +56,12 @@ const NavBar: React.FC = () => {
             </div>
             <div className='dropdown' ref={userMenu}>
                 <button className="user-button" onClick={handleDropdown}>
-                    <i className="fa-solid fa-user"></i>
+                    <i className="fa-solid fa-user" />
                 </button>
                 {open &&
                     <div className="user-options">
                         <a href="./settings">Settings</a>
-                        <a href="./">Logout</a>
+                        <a href="./" onClick={logout}>{user? "Log out": "Sign in"}</a>
                     </div>}
             </div>
         </div>

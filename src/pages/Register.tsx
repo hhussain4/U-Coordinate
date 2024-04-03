@@ -17,7 +17,7 @@ const Register: React.FC = () => {
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errorMsg: ErrorData = { email: "", password: "", name: "", timezone: "" };
-    
+
     const form = e.currentTarget;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
     const password = (form.elements.namedItem('password') as HTMLInputElement).value.trim();
@@ -30,6 +30,8 @@ const Register: React.FC = () => {
     }
     if (!password) {
       errorMsg.password = "Please enter a password";
+    } else if (password.length < 6) {
+      errorMsg.password = "Password must be at least 6 characters";
     }
     if (!validateName(name)) {
       errorMsg.name = "Please enter a valid name";
