@@ -1,4 +1,5 @@
-import DarkModeToggle from '@components/DarkMode'
+import DarkModeToggle from '@components/DarkMode';
+import Inbox from '@components/Inbox';
 import { useState, useEffect, useRef } from 'react';
 import { User, signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
@@ -54,6 +55,7 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
             <div className='dark-mode-toggle'>
                 <DarkModeToggle />
             </div>
+            <Inbox />
             <div className='dropdown' ref={userMenu}>
                 <button className="user-button" onClick={handleDropdown}>
                     <i className="fa-solid fa-user" />
