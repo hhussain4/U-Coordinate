@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { auth } from '../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { AuthError, createUserWithEmailAndPassword, deleteUser, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment-timezone';
 import '@styles/Register.css';
@@ -17,7 +18,7 @@ const timezones = moment.tz.names();
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [timezone, setTimezone] = useState(moment.tz.guess());
-  const handleTimezoneChange = (e: React.ChangeEvent<HTMLInputElement>) => { setTimezone(e.target.value)};
+  const handleTimezoneChange = (e: React.ChangeEvent<HTMLInputElement>) => { setTimezone(e.target.value) };
   const [error, setError] = useState<ErrorData>({ email: "", password: "", name: "", timezone: "" });
 
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,12 +48,28 @@ const Register: React.FC = () => {
     setError(errorMsg);
 
     // only register if there are no errors
+    let userCredentials;
     if (Object.values(errorMsg).every((error) => !error)) {
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, 'User', email), {
+          display_name: name,
+          theme: 'light',
+          timezone: timezone
+        });
         navigate("../");
-      } catch (err) {
-        console.error(err)
+      } catch (e) {
+        if ((e as AuthError).code === "auth/email-already-in-use") {
+          errorMsg.email = "This email is already in use";
+        } else {
+          errorMsg.timezone = "An error occured while registering";
+        }
+        setError(errorMsg);
+        
+        // if user creation is successful but setDoc is not, then rollback user creation
+        if (userCredentials) {
+          await deleteUser(userCredentials.user);
+        }
       }
     }
   };

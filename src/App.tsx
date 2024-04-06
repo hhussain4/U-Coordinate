@@ -12,7 +12,7 @@ import Register from '@pages/Register';
 import Settings from '@pages/Settings';
 
 function App() {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null);
 
   // checks for changes in the authentication state
   useEffect(() => {
@@ -32,7 +32,7 @@ function App() {
       <BrowserRouter>
         <NavBar user={user} />
         <Routes>
-          <Route index element={user ? <Navigate to="/calendar" /> : <Login />}/>
+          <Route index element={user ? <Navigate to="/calendar" /> : <Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/groups" element={<GroupView />} />
