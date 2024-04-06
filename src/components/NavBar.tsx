@@ -31,6 +31,7 @@ const NavBar: React.FC = () => {
                     <a href="./calendar">Calendar</a>
                     <a href="./groups">Groups</a>
                     <a href="./support">Support</a>
+                    <a href="./viewtickets">ViewTickets</a>
                 </div>
             </div>
             <img src='../../logo.png'></img>
