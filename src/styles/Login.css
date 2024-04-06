@@ -13,6 +13,10 @@
   text-align: center;
 }
 
+.auth-buttons {
+  padding: 0 65px;
+}
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -31,8 +35,7 @@ input {
 }
 
 .login-btn,
-.register-btn-login,
-.logout-btn {
+.register-btn-login {
   background-color: #441eb6;
   color: white;
   padding: 10px 20px;
@@ -45,8 +48,7 @@ input {
 
 
 .dark-mode .login-btn,
-.dark-mode .register-btn-login,
-.dark-mode .logout-btn {
+.dark-mode .register-btn-login {
   background-color: #005B41;
 }
 

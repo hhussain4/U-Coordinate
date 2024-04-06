@@ -1,0 +1,165 @@
+.inbox {
+  position: relative;
+  display: inline-block;
+  padding: 8px;
+}
+
+.inbox-icon {
+  cursor: pointer;
+
+  i:hover {
+    color: #595959;
+  }
+}
+
+.unread-count {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  padding: 0 4px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Dropdown */
+.inbox-dropdown {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display: block;
+  position: absolute;
+  background-color: #f9f9f9;
+  max-height: 240px;
+  width: 250px;
+  right: 0;
+  text-align: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.inbox-content {
+  align-items: center;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: 250px;
+  padding: 5px 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.notif-info {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+
+  div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.notif-title {
+  font-weight: bold;
+
+}
+
+.notif-sender {
+  font-size: 12px;
+}
+
+.unread {
+  align-items: center;
+  justify-content: center;
+  color: rgb(112 201 246);
+  font-size: 35px;
+  margin: 0 5px;
+  width: 20px;
+}
+
+.inbox-content:hover {
+  background-color: #f1f1f1;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  max-width: 40%;
+  max-height: 70%;
+  overflow: auto;
+  word-wrap: break-word;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  margin: auto;
+  text-align: center;
+
+  h2,
+  p {
+    margin: 0;
+  }
+}
+
+.modal-close-button {
+  border-radius: 50%;
+  background-color: white;
+  border: none;
+  color: gray;
+  cursor: pointer;
+  float: right;
+  font-size: 20px;
+  align-self: flex-start;
+
+  &:hover {
+    background-color: white;
+  }
+}
+
+.dark-mode {
+  .inbox-icon i:hover {
+    color: #008170;
+  }
+
+  .inbox-dropdown {
+    background-color: #005B41;
+  }
+
+  .modal-close-button,
+  .modal-close-button:hover {
+    background-color: #232D3F;
+  }
+
+  .inbox-content:hover {
+    background-color: #008170;
+  }
+
+  .inbox-content {
+    border-bottom: 1px solid #67778a ;
+  }
+}

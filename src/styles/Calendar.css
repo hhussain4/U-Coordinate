@@ -87,6 +87,12 @@
   margin-top: 0;
 }
 
+.calendar-event {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .calendar-event-container {
   margin-top: 14px;
 }

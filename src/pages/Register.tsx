@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { auth } from '../config/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { AuthError, createUserWithEmailAndPassword, deleteUser, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment-timezone';
 import '@styles/Register.css';
 
 interface ErrorData {
@@ -10,43 +12,64 @@ interface ErrorData {
   name: string;
   timezone: string;
 }
+
+const timezones = moment.tz.names();
+
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  const [timezone, setTimezone] = useState(moment.tz.guess());
+  const handleTimezoneChange = (e: React.ChangeEvent<HTMLInputElement>) => { setTimezone(e.target.value) };
   const [error, setError] = useState<ErrorData>({ email: "", password: "", name: "", timezone: "" });
 
   const register = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errorMsg: ErrorData = { email: "", password: "", name: "", timezone: "" };
-    
+
     const form = e.currentTarget;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
     const password = (form.elements.namedItem('password') as HTMLInputElement).value.trim();
     const name = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
-    const timezone = (form.elements.namedItem('timezone') as HTMLInputElement).value.trim();
 
-    // TODO: validate timezone and password
     if (!validateEmail(email)) {
       errorMsg.email = "Please enter a valid email";
     }
     if (!password) {
       errorMsg.password = "Please enter a password";
+    } else if (password.length < 6) {
+      errorMsg.password = "Password must be at least 6 characters";
     }
     if (!validateName(name)) {
       errorMsg.name = "Please enter a valid name";
     }
-    if (!timezone) {
-      errorMsg.timezone = "Please choose a timezone";
+    if (!timezone || !timezones.includes(timezone)) {
+      errorMsg.timezone = "Please enter a valid timezone";
     }
 
     setError(errorMsg);
 
     // only register if there are no errors
+    let userCredentials;
     if (Object.values(errorMsg).every((error) => !error)) {
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+        await setDoc(doc(db, 'User', email), {
+          display_name: name,
+          theme: 'light',
+          timezone: timezone
+        });
         navigate("../");
-      } catch (err) {
-        console.error(err)
+      } catch (e) {
+        if ((e as AuthError).code === "auth/email-already-in-use") {
+          errorMsg.email = "This email is already in use";
+        } else {
+          errorMsg.timezone = "An error occured while registering";
+        }
+        setError(errorMsg);
+        
+        // if user creation is successful but setDoc is not, then rollback user creation
+        if (userCredentials) {
+          await deleteUser(userCredentials.user);
+        }
       }
     }
   };
@@ -90,12 +113,19 @@ const Register: React.FC = () => {
 
           <label>
             <input
-              className='register-field'
               type="text"
               id="timezone"
-              name="timezone"
-              placeholder='Timezone'
+              className="register-field"
+              value={timezone}
+              onChange={handleTimezoneChange}
+              placeholder="Timezone"
+              list="timezones"
             />
+            <datalist id="timezones">
+              {timezones.map((tz, index) => (
+                <option key={index} value={tz} />
+              ))}
+            </datalist>
             {error.timezone && <div className="error-message">{error.timezone}</div>}
           </label>
           <button className='register-btn' type="submit">Register</button>
