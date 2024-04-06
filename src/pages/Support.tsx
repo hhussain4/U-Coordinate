@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import ViewTickets from '@pages/ViewTickets';
 import '@styles/Pages.css';
 
 const Support: React.FC = () => {
-    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [filteredResults, setFilteredResults] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [tickets, setTickets] = useState<any[]>([]); // Keep track of submitted tickets
     const [ticketData, setTicketData] = useState<any>({
         date: '',
         time: '',
@@ -50,8 +50,19 @@ const Support: React.FC = () => {
     const handleTicketSubmission = () => {
         // Here you can handle submitting the ticket data, e.g., sending it to an API
         console.log(ticketData);
-        // Navigate to ViewTickets page with ticket data
-        navigate('/viewtickets', { state: ticketData }); // Pass ticketData directly
+        // Add the submitted ticket to the tickets array
+        setTickets([...tickets, ticketData]);
+        // Reset ticket data for the next submission
+        setTicketData({
+            date: '',
+            time: '',
+            subject: '',
+            category: 'General',
+            durationFrom: '',
+            durationTo: '',
+            reasons: '',
+            description: ''
+        });
         // Close the modal after submitting the ticket
         setIsModalOpen(false);
     };
@@ -145,6 +156,8 @@ const Support: React.FC = () => {
                     </div>
                 </div>
             )}
+            {/* Display the submitted tickets */}
+            <ViewTickets tickets={tickets} />
         </>
     );
 }

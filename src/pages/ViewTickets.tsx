@@ -1,32 +1,45 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import '@styles/Pages.css';
 
-const ViewTickets: React.FC = () => {
-    // Get ticket data from location state
-    const location = useLocation();
-    const ticketData = location.state;
+interface Ticket {
+    date: string;
+    time: string;
+    subject: string;
+    category: string;
+    durationFrom?: string;
+    durationTo?: string;
+    reasons?: string;
+    description?: string;
+}
 
+interface ViewTicketsProps {
+    tickets: Ticket[];
+}
+
+const ViewTickets: React.FC<ViewTicketsProps> = ({ tickets }) => {
     return (
-        <div>
-            <h2>View Tickets</h2>
-            {/* Display ticket information */}
-            <div>
-                <p>Date: {ticketData.date}</p>
-                <p>Time: {ticketData.time}</p>
-                <p>Subject: {ticketData.subject}</p>
-                <p>Category: {ticketData.category}</p>
-                {/* Conditionally render additional fields based on category */}
-                {ticketData.category === 'TimeOff' && (
-                    <div>
-                        <p>Duration From: {ticketData.durationFrom}</p>
-                        <p>Duration To: {ticketData.durationTo}</p>
-                        <p>Reasons: {ticketData.reasons}</p>
-                    </div>
-                )}
-                {(ticketData.category === 'Bug' || ticketData.category === 'Policy' || ticketData.category === 'General' || ticketData.category === 'Account') && (
-                    <p>Description: {ticketData.description}</p>
-                )}
-            </div>
+        <div className='header'>
+            <h2 className="title">View Tickets</h2>
+            {/* Display all submitted tickets */}
+            {tickets.map((ticket, index) => (
+                <div key={index} className="ticket">
+                    <p>Date: {ticket.date}</p>
+                    <p>Time: {ticket.time}</p>
+                    <p>Subject: {ticket.subject}</p>
+                    <p>Category: {ticket.category}</p>
+                    {/* Conditionally render additional fields based on category */}
+                    {ticket.category === 'TimeOff' && (
+                        <div>
+                            <p>Duration From: {ticket.durationFrom}</p>
+                            <p>Duration To: {ticket.durationTo}</p>
+                            <p>Reasons: {ticket.reasons}</p>
+                        </div>
+                    )}
+                    {(ticket.category === 'Bug' || ticket.category === 'Policy' || ticket.category === 'General' || ticket.category === 'Account') && (
+                        <p>Description: {ticket.description}</p>
+                    )}
+                </div>
+            ))}
         </div>
     );
 }
