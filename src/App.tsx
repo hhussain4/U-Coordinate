@@ -10,6 +10,7 @@ import Support from '@pages/Support';
 import Login from '@pages/Login';
 import Register from '@pages/Register';
 import Settings from '@pages/Settings';
+import ViewTickets from '@pages/ViewTickets';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -38,6 +39,7 @@ function App() {
           <Route path="/groups" element={<GroupView />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/viewtickets" element={<ViewTickets />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
