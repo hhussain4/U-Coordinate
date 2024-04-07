@@ -1,11 +1,13 @@
 export class Notification {
+    id: string;
     title: string;
     sender: string;
     info: string;
     priority: number;
     read: boolean;
 
-    constructor(title: string, sender: string, info: string, priority: number, read: boolean = false) {
+    constructor(id: string, title: string, sender: string, info: string, priority: number, read: boolean = false) {
+        this.id = id;
         this.title = title;
         this.sender = sender;
         this.info = info;

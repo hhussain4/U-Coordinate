@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { auth, db } from '../config/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { AuthError, createUserWithEmailAndPassword, deleteUser, signOut } from 'firebase/auth';
+import { AuthError, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment-timezone';
 import '@styles/Register.css';
@@ -26,7 +26,7 @@ const Register: React.FC = () => {
     const errorMsg: ErrorData = { email: "", password: "", name: "", timezone: "" };
 
     const form = e.currentTarget;
-    const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim();
+    const email = (form.elements.namedItem('email') as HTMLInputElement).value.trim().toLowerCase();
     const password = (form.elements.namedItem('password') as HTMLInputElement).value.trim();
     const name = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
 
@@ -48,11 +48,10 @@ const Register: React.FC = () => {
     setError(errorMsg);
 
     // only register if there are no errors
-    let userCredentials;
     if (Object.values(errorMsg).every((error) => !error)) {
       try {
-        userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, 'User', email), {
+        await createUserWithEmailAndPassword(auth, email, password);
+        setDoc(doc(db, 'User', email), {
           display_name: name,
           theme: 'light',
           timezone: timezone
@@ -65,11 +64,6 @@ const Register: React.FC = () => {
           errorMsg.timezone = "An error occured while registering";
         }
         setError(errorMsg);
-        
-        // if user creation is successful but setDoc is not, then rollback user creation
-        if (userCredentials) {
-          await deleteUser(userCredentials.user);
-        }
       }
     }
   };
