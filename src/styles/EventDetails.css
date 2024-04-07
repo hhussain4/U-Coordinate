@@ -68,6 +68,10 @@ td:first-child {
     white-space: nowrap;
 }
 
+td>p {
+    margin: 0;
+}
+
 .dark-mode {
     .event-box {
         background-color: rgb(96 98 128);

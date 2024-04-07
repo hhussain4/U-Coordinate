@@ -1,11 +1,11 @@
 import '@styles/EventDetails.css';
-import { CalendarEvent } from './Calendar-days';
 import { useEffect, useRef, useState } from 'react';
+import { Event } from '@classes/Event';
 
 interface EventDetailsProps {
-  events: CalendarEvent[];
-  onEdit: (event: CalendarEvent) => void;
-  onDelete: (event: CalendarEvent) => void;
+  events: Event[];
+  onEdit: (event: Event) => void;
+  onDelete: (event: Event) => void;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete }) => {
@@ -55,26 +55,32 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete })
             </div>
           </div>
           <table>
-            <tr>
-              <td>Description:</td>
-              <td>{event.description}</td>
-            </tr>
-            <tr>
-              <td>Start:</td>
-              <td>{formatDate(new Date(event.start), new Date(event.end))}</td>
-            </tr>
-            <tr>
-              <td>End:</td>
-              <td>{formatDate(new Date(event.end), new Date(event.start))}</td>
-            </tr>
-            <tr>
-              <td>Location:</td>
-              <td>{event.location}</td>
-            </tr>
-            <tr>
-              <td>Members:</td>
-              <td>{event.usersInvolved}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Description:</td>
+                <td>{event.description}</td>
+              </tr>
+              <tr>
+                <td>Start:</td>
+                <td>{formatDate(new Date(event.start), new Date(event.end))}</td>
+              </tr>
+              <tr>
+                <td>End:</td>
+                <td>{formatDate(new Date(event.end), new Date(event.start))}</td>
+              </tr>
+              <tr>
+                <td>Location:</td>
+                <td>{event.location}</td>
+              </tr>
+              <tr>
+                <td>Members:</td>
+                <td>
+                  {event.members.map((member, index) =>
+                    <p key={index}>{member.displayName}</p>
+                  )}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       ))}

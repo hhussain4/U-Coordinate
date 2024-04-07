@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Group } from '@classes/Group';
 import { User } from '@classes/User';
+import { UserContext } from 'src/App';
 import GroupDetails from '@components/GroupDetails';
 import CreateGroup from '@components/CreateGroup';
 import '@styles/Pages.css';
 
 const GroupView: React.FC = () => {
+    const [user] = useContext(UserContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+
+    const openModal = () => {
+        if (!user) {
+            alert('Sign in to use this feature');
+            return;
+        }
+        setIsModalOpen(true);
+    }
     const closeModal = () => setIsModalOpen(false);
 
     const [groups, setGroups] = useState<Group[]>(() => {
@@ -39,7 +48,7 @@ const GroupView: React.FC = () => {
             <div className='empty'>
                 {groups.length == 0 && <p>No groups to display</p>}
             </div>
-            <CreateGroup isOpen={isModalOpen} onClose={closeModal} addGroup={addGroup} />
+            {isModalOpen && <CreateGroup onClose={closeModal} addGroup={addGroup} />}
         </>
     );
 }

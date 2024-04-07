@@ -17,13 +17,13 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ groups }) => {
                         <p>Admins: </p>
                         <ul>
                             {group.getAdmins().map((admin, i) => (
-                                <li key={i}>{admin.getDisplayName()}</li>
+                                <li key={i}>{admin.displayName}</li>
                             ))}
                         </ul>
                         <p>Members: </p>
                         <ul>
                             {group.getMembers().map((member, i) => (
-                                <li key={i}>{member.getDisplayName()}</li>
+                                <li key={i}>{member.displayName}</li>
                             ))}
                         </ul>
                     </div>

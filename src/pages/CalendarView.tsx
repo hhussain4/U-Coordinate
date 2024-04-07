@@ -1,20 +1,40 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from 'src/config/firebase';
+import { Event } from '@classes/Event';
+import { UserContext } from 'src/App';
+import { User } from '@classes/User';
 import Calendar from '@components/Calendar';
-import { CalendarEvent } from '@components/Calendar-days';
 import CreateEvent from '@components/CreateEvent';
 import EventDetails from '@components/EventDetails';
 import '@styles/CalendarView.css';
 
 const CalendarView: React.FC = () => {
+    const [user] = useContext(UserContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [events, setEvents] = useState<CalendarEvent[]>(() => {
-        // Retrieve events from local storage or initialize as empty array
-        const savedEvents = localStorage.getItem('events');
-        return savedEvents ? JSON.parse(savedEvents) : [];
-    });
+    const [events, setEvents] = useState<Event[]>([]);
 
-    // sort the events by start dates
-    events.sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
+    // retrieves events only if the user is logged in
+    useEffect(() => {
+        if (!user) {
+            setEvents([]);
+            return;
+        }
+        const q = query(collection(db, 'Event'), where('members', "array-contains", user?.username));
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const events = querySnapshot.docs.map(async (doc) => {
+                const data = doc.data();
+                const members = await getDisplayNames(data.members);
+                return new Event(data.name, data.description, new Date(data.start), new Date(data.end), data.location, members, doc.id,
+                    data.recurrence, data.recur_times);
+            });
+            const resolvedEvents = await Promise.all(events);
+            const sortedEvents = resolvedEvents.sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
+            setEvents(sortedEvents);
+        });
+
+        () => unsubscribe();
+    }, [user]);
 
     //filter for events that start today
     const today = new Date();
@@ -26,38 +46,56 @@ const CalendarView: React.FC = () => {
     });
 
     //adding state to store the selected date's events
-    const [selectedDayEvents, setSelectedDayEvents] = useState<CalendarEvent[]>(todayEvents);
+    const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>(todayEvents);
 
-    const handleOpenModal = () => setIsModalOpen(true);
+    const handleOpenModal = () => {
+        if (!user) {
+            alert('Sign in to use this feature');
+            return;
+        }
+        setIsModalOpen(true);
+    }
     const handleCloseModal = () => setIsModalOpen(false);
 
-    //below is a callback function that updates 'selectedDayEvents'
-    const handleSelectDay = (events: CalendarEvent[]) => {
+    const handleSelectDay = (events: Event[]) => {
         setSelectedDayEvents(events);
     };
 
     // Handler to add a new event
-    const addEvent = (newEvent: CalendarEvent) => {
-        setEvents(prevEvents => {
-            const updatedEvents = [...prevEvents, newEvent];
-            // Save updated events to local storage
-            localStorage.setItem('events', JSON.stringify(updatedEvents));
-            return updatedEvents;
-        });
+    const addEvent = async (newEvent: Event) => {
+        try {
+            const members = newEvent.members.map(member => member.username);
+            const doc = await addDoc(collection(db, 'Event'), {
+                name: newEvent.name,
+                description: newEvent.description,
+                start: newEvent.start.getTime(),
+                end: newEvent.end.getTime(),
+                location: newEvent.location,
+                members: members,
+                recurrence: newEvent.recurrence,
+                recur_times: newEvent.recurTimes
+            });
+            newEvent.id = doc.id;
+        } catch (error) {
+            console.log(error);
+            alert('Error occured while adding event');
+        }
     };
 
     //below are methods to handle editing and deleting events
-    const handleEditEvent = (eventToEdit: CalendarEvent) => {
+    const handleEditEvent = (eventToEdit: Event) => {
         // Implement code for edit functionality here
-      };
+    };
 
-    const handleDeleteEvent = (eventToDelete: CalendarEvent) => {
-        setEvents((prevEvents) => {
-          const updatedEvents = prevEvents.filter(event => event !== eventToDelete);
-          localStorage.setItem('events', JSON.stringify(updatedEvents));
-          return updatedEvents;
-        });
-        setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
+    const handleDeleteEvent = async (eventToDelete: Event) => {
+        try {
+            await deleteDoc(doc(db, 'Event', eventToDelete.id));
+            setEvents((prevEvents) => prevEvents.filter(event => event !== eventToDelete));
+            setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
+        } catch (error) {
+            console.log(error);
+            alert("Error occured while deleting event");
+        }
     };
 
     return (
@@ -71,9 +109,23 @@ const CalendarView: React.FC = () => {
                     <Calendar events={events} onSelectDay={handleSelectDay} />
                 </div>
             </div>
-            <CreateEvent isOpen={isModalOpen} onClose={handleCloseModal} addEvent={addEvent} />
+            {isModalOpen && <CreateEvent onClose={handleCloseModal} addEvent={addEvent} />}
         </>
     );
 };
+
+// returns list of users with their usernames and displaynames
+async function getDisplayNames(usernames: string[]): Promise<User[]> {
+    const displayNames = await Promise.all(usernames.map(async (username: string) => {
+        const user = await getDoc(doc(db, 'User', username));
+
+        if (user.exists()) {
+            return new User(username, user.data().display_name);
+        } else {
+            return new User(username, username);
+        }
+    }));
+    return displayNames;
+}
 
 export default CalendarView;

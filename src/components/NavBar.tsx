@@ -1,27 +1,25 @@
+import { useState, useEffect, useRef, useContext } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase';
+import { UserContext } from 'src/App';
 import DarkModeToggle from '@components/DarkMode';
 import Inbox from '@components/Inbox';
-import { useState, useEffect, useRef } from 'react';
-import { User, signOut } from 'firebase/auth';
-import { auth } from '../config/firebase';
 import '@styles/NavBar.css'
 
-interface NavBarProps {
-    user: User | null;
-}
-
-const NavBar: React.FC<NavBarProps> = ({ user }) => {
+const NavBar: React.FC = () => {
     const [open, setOpen] = useState(false);
     const handleDropdown = () => setOpen(!open);
-    
+    const [user] = useContext(UserContext);
+
     // makes user menu collapse when clicking outside the menu
     const userMenu = useRef<HTMLDivElement>(null);
     useEffect(() => {
         let closeDropdown = (e: MouseEvent) => {
-            if(!userMenu.current?.contains(e.target as Node)) {
+            if (!userMenu.current?.contains(e.target as Node)) {
                 setOpen(false);
             }
         }
-        
+
         document.addEventListener('mousedown', closeDropdown);
         return () => {
             document.removeEventListener('mousedown', closeDropdown);
@@ -49,14 +47,14 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                     <a href="./calendar">Calendar</a>
                     <a href="./groups">Groups</a>
                     <a href="./support">Support</a>
-                    <a href="./viewtickets">ViewTickets</a>
+                    <a href="./tickets">Tickets</a>
                 </div>
             </div>
             <img src='../../logo.png'></img>
             <div className='dark-mode-toggle'>
                 <DarkModeToggle />
             </div>
-            <Inbox />
+            {user && <Inbox />}
             <div className='dropdown' ref={userMenu}>
                 <button className="user-button" onClick={handleDropdown}>
                     <i className="fa-solid fa-user" />
@@ -64,7 +62,7 @@ const NavBar: React.FC<NavBarProps> = ({ user }) => {
                 {open &&
                     <div className="user-options">
                         <a href="./settings">Settings</a>
-                        <a href="./" onClick={logout}>{user? "Log out": "Sign in"}</a>
+                        <a href="./" onClick={logout}>{user ? "Log out" : "Sign in"}</a>
                     </div>}
             </div>
         </div>

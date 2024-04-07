@@ -4,7 +4,6 @@ import { User } from "@classes/User";
 import '@styles/CreateForm.css';
 
 interface CreateGroupProps {
-    isOpen: boolean;
     onClose: () => void;
     addGroup: (group: Group) => void;
 }
@@ -15,9 +14,7 @@ interface ErrorData {
     members: string;
 }
 
-const CreateGroup: React.FC<CreateGroupProps> = ({ isOpen, onClose, addGroup }) => {
-    if (!isOpen) return null;
-
+const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
     const [errors, setErrors] = useState<ErrorData>({ name: "", admins: "", members: "" });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

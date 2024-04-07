@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import CalendarDays, { CalendarDay, CalendarEvent } from './Calendar-days';
+import CalendarDays, { CalendarDay } from './Calendar-days';
+import { Event } from '@classes/Event';
 import '@styles/Calendar.css';
 import '@pages/CalendarView';
 
@@ -8,8 +9,8 @@ interface CalendarState {
 }
 
 interface CalendarProps {
-    events: CalendarEvent[];
-    onSelectDay: (events: CalendarEvent[]) => void;
+    events: Event[];
+    onSelectDay: (events: Event[]) => void;
 }
 
 export default class Calendar extends Component<CalendarProps, CalendarState> {
