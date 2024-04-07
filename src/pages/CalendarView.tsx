@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from 'src/config/firebase';
 import { Event } from '@classes/Event';
 import { UserContext } from 'src/App';
@@ -19,16 +19,18 @@ const CalendarView: React.FC = () => {
         if (!user) {
             setEvents([]);
             return;
-        } 
+        }
         const q = query(collection(db, 'Event'), where('members', "array-contains", user?.username));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const events = querySnapshot.docs.map(doc => {
+        const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+            const events = querySnapshot.docs.map(async (doc) => {
                 const data = doc.data();
-                const members = data.members.map((member: any) => new User(member.display_name));
+                const members = await getDisplayNames(data.members);
                 return new Event(data.name, data.description, new Date(data.start), new Date(data.end), data.location, members, doc.id,
-                        data.recurrence, data.recur_times);
-            }).sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
-            setEvents(events);
+                    data.recurrence, data.recur_times);
+            });
+            const resolvedEvents = await Promise.all(events);
+            const sortedEvents = resolvedEvents.sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
+            setEvents(sortedEvents);
         });
 
         () => unsubscribe();
@@ -74,7 +76,6 @@ const CalendarView: React.FC = () => {
                 recur_times: newEvent.recurTimes
             });
             newEvent.id = doc.id;
-            setEvents(prevEvents => [...prevEvents, newEvent]);
         } catch (error) {
             console.log(error);
             alert('Error occured while adding event');
@@ -112,5 +113,19 @@ const CalendarView: React.FC = () => {
         </>
     );
 };
+
+// returns list of users with their usernames and displaynames
+async function getDisplayNames(usernames: string[]): Promise<User[]> {
+    const displayNames = await Promise.all(usernames.map(async (username: string) => {
+        const user = await getDoc(doc(db, 'User', username));
+
+        if (user.exists()) {
+            return new User(username, user.data().display_name);
+        } else {
+            return new User(username, username);
+        }
+    }));
+    return displayNames;
+}
 
 export default CalendarView;

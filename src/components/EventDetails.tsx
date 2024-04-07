@@ -55,30 +55,32 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete })
             </div>
           </div>
           <table>
-            <tr>
-              <td>Description:</td>
-              <td>{event.description}</td>
-            </tr>
-            <tr>
-              <td>Start:</td>
-              <td>{formatDate(new Date(event.start), new Date(event.end))}</td>
-            </tr>
-            <tr>
-              <td>End:</td>
-              <td>{formatDate(new Date(event.end), new Date(event.start))}</td>
-            </tr>
-            <tr>
-              <td>Location:</td>
-              <td>{event.location}</td>
-            </tr>
-            <tr>
-              <td>Members:</td>
-              <td>
-                  {event.members.map(member => 
-                    <p>{member.displayName}</p>
+            <tbody>
+              <tr>
+                <td>Description:</td>
+                <td>{event.description}</td>
+              </tr>
+              <tr>
+                <td>Start:</td>
+                <td>{formatDate(new Date(event.start), new Date(event.end))}</td>
+              </tr>
+              <tr>
+                <td>End:</td>
+                <td>{formatDate(new Date(event.end), new Date(event.start))}</td>
+              </tr>
+              <tr>
+                <td>Location:</td>
+                <td>{event.location}</td>
+              </tr>
+              <tr>
+                <td>Members:</td>
+                <td>
+                  {event.members.map((member, index) =>
+                    <p key={index}>{member.displayName}</p>
                   )}
-              </td>
-            </tr>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       ))}

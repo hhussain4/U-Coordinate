@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Event } from '@classes/Event';
 import { User } from '@classes/User';
-import '@styles/CreateForm.css';
 import { db } from 'src/config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import Multiselect from 'multiselect-react-dropdown';
+import '@styles/CreateForm.css';
 
 interface CreateEventProps {
   onClose: () => void;
@@ -21,6 +22,14 @@ interface ErrorData {
 const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
   const [errors, setErrors] = useState<ErrorData>({ name: "", description: "", time: "", location: "", users: "" });
   const [usernames, setUsernames] = useState<string[]>([]);
+  const [users, setUser] = useState<User[]>([]);
+
+  const addUser = (prevList: string[], user: string) => {
+    setUser((prevUsers) => [...prevUsers, new User(user, user)]);
+  }
+  const removeUser = (prevList: string[], user: string) => {
+    setUser((prevUsers) => prevUsers.filter(m => m.username != user));
+  }
 
   // gets the usernames from the database
   useEffect(() => {
@@ -47,7 +56,6 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
     const start = (form.elements.namedItem('start') as HTMLInputElement).value.trim();
     const end = (form.elements.namedItem('end') as HTMLInputElement).value.trim();
     const location = (form.elements.namedItem('location') as HTMLInputElement).value.trim();
-    const users = (form.elements.namedItem('users') as HTMLInputElement).value.trim();
 
     //checking for empty fields
     if (!name) {
@@ -62,7 +70,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
     if (!location) {
       errorMsg.location = "Please provide a location";
     }
-    if (!users) {
+    if (users.length === 0) {
       errorMsg.users = "Please provide at least one username";
     }
 
@@ -77,8 +85,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
 
     //only submits if there are no errors
     if (Object.values(errorMsg).every((error) => !error)) {
-      const usersInvolved = users.split(', ').map(user => new User(user, user));
-      const newEvent = new Event(name, description, startDate, endDate, location, usersInvolved);
+      const newEvent = new Event(name, description, startDate, endDate, location, users);
       addEvent(newEvent);
       onClose();
     }
@@ -107,8 +114,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
           <label>
             Event End:
             <input type="datetime-local" name="end" />
+            {errors.time && <div className="err-msg">{errors.time}</div>}
           </label>
-          {errors.time && <div className="err-msg">{errors.time}</div>}
           <label>
             Event Location:
             <input type="text" name="location" />
@@ -116,7 +123,13 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
           </label>
           <label>
             Users Involved:
-            <input type="text" name="users" />
+            <Multiselect
+              isObject={false}
+              options={usernames}
+              onSelect={addUser}
+              onRemove={removeUser}
+              hidePlaceholder={true}
+            />
             {errors.users && <div className="err-msg">{errors.users}</div>}
           </label>
           <button className="submit-button" type="submit">Submit</button>
