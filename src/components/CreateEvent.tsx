@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { CalendarEvent } from './Calendar-days';
+import { useEffect, useState } from 'react';
+import { Event } from '@classes/Event';
+import { User } from '@classes/User';
 import '@styles/CreateForm.css';
+import { db } from 'src/config/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 interface CreateEventProps {
-  isOpen: boolean;
   onClose: () => void;
-  addEvent: (newEvent: CalendarEvent) => void;
+  addEvent: (newEvent: Event) => void;
 }
 
 interface ErrorData {
@@ -16,9 +18,24 @@ interface ErrorData {
   users: string;
 }
 
-const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) => {
-  if (!isOpen) return null;
+const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
   const [errors, setErrors] = useState<ErrorData>({ name: "", description: "", time: "", location: "", users: "" });
+  const [usernames, setUsernames] = useState<string[]>([]);
+
+  // gets the usernames from the database
+  useEffect(() => {
+    const fetchUsernames = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'User'));
+        const usernames = querySnapshot.docs.map(doc => doc.id);
+        setUsernames(usernames);
+      } catch (error) {
+        console.error('Error fetching usernames:', error);
+      }
+    };
+
+    fetchUsernames();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,7 +65,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
     if (!users) {
       errorMsg.users = "Please provide at least one username";
     }
-    
+
     //checking for valid inputs
     const startDate = new Date(start);
     const endDate = new Date(end);
@@ -60,14 +77,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
 
     //only submits if there are no errors
     if (Object.values(errorMsg).every((error) => !error)) {
-      const newEvent: CalendarEvent = {
-        name: name,
-        description: description,
-        start: startDate,
-        end: endDate,
-        location: location,
-        usersInvolved: users.split(', '),
-      };
+      const usersInvolved = users.split(', ').map(user => new User(user, user));
+      const newEvent = new Event(name, description, startDate, endDate, location, usersInvolved);
       addEvent(newEvent);
       onClose();
     }
@@ -78,7 +89,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
       <div className="modal">
         <button className="modal-close-btn" onClick={onClose}>X</button>
         <h2>Create Event</h2>
-        <form onSubmit={handleSubmit}> {/* this allows us to capture user input for a new event. Allows us to also include more complex event handling later like backend work or API stuff  */}
+        <form onSubmit={handleSubmit}>
           <label>
             Event Name:
             <input type="text" name="name" />
@@ -116,7 +127,3 @@ const CreateEvent: React.FC<CreateEventProps> = ({ isOpen, onClose, addEvent }) 
 };
 
 export default CreateEvent;
-
-function addEvent(newEvent: CalendarEvent) {
-  throw new Error('Function not implemented.');
-}

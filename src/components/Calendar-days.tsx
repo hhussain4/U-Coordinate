@@ -1,11 +1,4 @@
-export interface CalendarEvent {
-    name: string;
-    description: string;
-    start: Date;
-    end: Date;
-    location: string;
-    usersInvolved: string[];
-}
+import { Event } from "@classes/Event";
 
 export interface CalendarDay {
     currentMonth: boolean;
@@ -15,14 +8,14 @@ export interface CalendarDay {
     selected: boolean;
     year: number;
     today: boolean;
-    events?: CalendarEvent[];
+    events?: Event[];
 }
 
 interface CalendarDaysProps {
     day: Date;
-    events: CalendarEvent[];
+    events: Event[];
     changeCurrentDay: (day: CalendarDay) => void;
-    onSelectDay: (events: CalendarEvent[]) => void; // New callback prop
+    onSelectDay: (events: Event[]) => void;
 }
 
 const CalendarDays: React.FC<CalendarDaysProps> = (props) => {

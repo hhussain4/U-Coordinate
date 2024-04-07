@@ -41,7 +41,7 @@ const Inbox: React.FC = () => {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const notifs = querySnapshot.docs.map(doc => {
                 const data = doc.data();
-                return new Notification(doc.id, data.title, data.sender, data.info, data.priority, data.read)
+                return new Notification(doc.id, data.title, data.sender, data.info, data.priority, data.read);
             });
             setNotifications(notifs);
             setUnreadNotifications(notifs.filter(e => !e.read).length);

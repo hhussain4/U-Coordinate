@@ -1,65 +1,36 @@
 import { User } from "./User";
 
 export class Event {
-    private name: string;
-    private members: User[];
-    private start: Date;
-    private end: Date;
+    name: string;
+    description: string;
+    start: Date;
+    end: Date;
+    location: string;
+    members: User[];
+    id: string;
     // number of days between events
-    private recurrence: number;
+    recurrence: number;
+    // number of times it recurs
+    recurTimes: number;
 
-    constructor(name: string, members: User[], start: Date, end: Date, recurrence: number = 0) {
+    constructor(name: string, description: string, start: Date, end: Date, location: string, members: User[], id: string = '', recurrence: number = 0, recurTimes: number = 0) {
         this.name = name;
-        this.members = members;
+        this.description = description;
         this.start = start;
         this.end = end;
+        this.location = location;
+        this.members = members;
+        this.id = id;
         this.recurrence = recurrence;
+        this.recurTimes = recurTimes;
     }
 
     addMember(member: User) {
-        if(!this.members.includes(member)) this.members.push(member);
+        if (!this.members.includes(member)) this.members.push(member);
     }
 
     removeMember(member: User) {
-        if(this.members.includes(member)) this.members.splice(this.members.indexOf(member), 1);
-    }
-
-    // getters
-    getName() {
-        return this.name;
-    }
-
-    getMembers() {
-        return this.members;
-    }
-
-    getStart() {
-        return this.start;
-    }
-
-    getEnd() {
-        return this.end;
-    }
-
-    getRecurrence() {
-        return this.recurrence;
-    }
-
-    // setters
-    setName(name:string) {
-        this.name = name;
-    }
-
-    setMembers(members: User[]) {
-        this.members = members;
-    }
-
-    setStart(start: Date) {
-        this.start = start;
-    }
-
-    setEnd(end: Date) {
-        this.end = end;
+        if (this.members.includes(member)) this.members.splice(this.members.indexOf(member), 1);
     }
 
     setTimeRange(start: Date, end: Date) {
@@ -68,10 +39,4 @@ export class Event {
             this.end = end;
         }
     }
-
-    setRecurrence(recurrence: number) {
-        this.recurrence = recurrence;
-    }
 }
-
-module.exports = Event;

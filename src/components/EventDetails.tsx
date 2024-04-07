@@ -1,11 +1,11 @@
 import '@styles/EventDetails.css';
-import { CalendarEvent } from './Calendar-days';
 import { useEffect, useRef, useState } from 'react';
+import { Event } from '@classes/Event';
 
 interface EventDetailsProps {
-  events: CalendarEvent[];
-  onEdit: (event: CalendarEvent) => void;
-  onDelete: (event: CalendarEvent) => void;
+  events: Event[];
+  onEdit: (event: Event) => void;
+  onDelete: (event: Event) => void;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete }) => {
@@ -73,7 +73,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete })
             </tr>
             <tr>
               <td>Members:</td>
-              <td>{event.usersInvolved}</td>
+              <td>
+                  {event.members.map(member => 
+                    <p>{member.displayName}</p>
+                  )}
+              </td>
             </tr>
           </table>
         </div>
