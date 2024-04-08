@@ -45,11 +45,15 @@ export class Event {
     getCreationNotification(user: User, priority: number): Notification {
         const title = `New event created: ${this.name}`;
         const sender = `${user.displayName}: ${user.username}`;
-        const info = `Event name: ${this.name}\n
-        Description: ${this.description}\n
-        Time: ${this.start.toLocaleDateString()} to ${this.end.toLocaleDateString()}\n
-        Location: ${this.location}\n
-        Members: ${this.members.map(user => user.username)}`;
+        const info = `${user.displayName} has created a new event for ${this.start.toLocaleDateString()}: ${this.name}`;
+        return new Notification(title, sender, info, priority);
+    }
+
+    // for notifying users of a canceled event
+    getDeleteNotification(user: User, priority: number): Notification {
+        const title = `Event canceled: ${this.name}`;
+        const sender = `${user.displayName}: ${user.username}`;
+        const info = `${user.displayName} has canceled an event for ${this.start.toLocaleDateString()}: ${this.name}`;
         return new Notification(title, sender, info, priority);
     }
 }
