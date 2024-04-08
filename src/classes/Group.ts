@@ -35,9 +35,7 @@ export class Group {
     getCreationNotification(user: User): Notification {
         const title = `New group created: ${this.name}`;
         const sender = `${user.displayName}: ${user.username}`
-        const info = `Group name: ${this.name}\n
-        Admins: ${this.admins.map(user => user.username)}\n
-        Members: ${this.members.map(user => user.username)}`;
+        const info = `${user.displayName} has added you to a group: ${this.name}`;
         return new Notification(title, sender, info, 3);
     }
 }

@@ -62,5 +62,3 @@ export class Ticket {
         this.resolved = !this.resolved;
     }
 }
-
-module.exports = Ticket;
