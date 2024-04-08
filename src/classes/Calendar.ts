@@ -3,8 +3,8 @@ import { Group } from "./Group";
 import { User } from "./User";
 
 export class Calendar {
-    private members: User[];
-    private events: Event[];
+    members: User[];
+    events: Event[];
 
     constructor(members: User[], events?:Event[]) {
         this.members = members;
@@ -28,35 +28,14 @@ export class Calendar {
     }
 
     addGroup(group: Group) {
-        group.getMembers().forEach(member => {
+        group.members.forEach(member => {
             this.addMember(member);
         });
     }
 
     removeGroup(group: Group) {
-        group.getMembers().forEach(member => {
+        group.members.forEach(member => {
             this.removeMember(member);
         });
     }
-    
-    // getters
-    getEvents() {
-        return this.events;
-    }
-
-    getMembers() {
-        return this.members;
-    }
-
-    // setters
-    setEvents(events: Event[]) {
-        this.events = events;
-    }
-
-    setMembers(members: User[]) {
-        this.members = members;
-    }
-
 }
-
-module.exports = Calendar;

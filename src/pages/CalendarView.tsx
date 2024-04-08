@@ -24,7 +24,7 @@ const CalendarView: React.FC = () => {
         const unsubscribe = onSnapshot(q, async (querySnapshot) => {
             const events = querySnapshot.docs.map(async (doc) => {
                 const data = doc.data();
-                const members = await getDisplayNames(data.members);
+                const members = await getUsers(data.members);
                 return new Event(data.name, data.description, new Date(data.start), new Date(data.end), data.location, members, doc.id,
                     data.recurrence, data.recur_times);
             });
@@ -65,7 +65,7 @@ const CalendarView: React.FC = () => {
     const addEvent = async (newEvent: Event) => {
         try {
             const members = newEvent.members.map(member => member.username);
-            const doc = await addDoc(collection(db, 'Event'), {
+            addDoc(collection(db, 'Event'), {
                 name: newEvent.name,
                 description: newEvent.description,
                 start: newEvent.start.getTime(),
@@ -75,7 +75,9 @@ const CalendarView: React.FC = () => {
                 recurrence: newEvent.recurrence,
                 recur_times: newEvent.recurTimes
             });
-            newEvent.id = doc.id;
+            // notify all members of the event's creation
+            const notification = newEvent.getCreationNotification(user!, 3);
+            members.forEach(username => notification.notify(username));
         } catch (error) {
             console.log(error);
             alert('Error occured while adding event');
@@ -90,7 +92,6 @@ const CalendarView: React.FC = () => {
     const handleDeleteEvent = async (eventToDelete: Event) => {
         try {
             await deleteDoc(doc(db, 'Event', eventToDelete.id));
-            setEvents((prevEvents) => prevEvents.filter(event => event !== eventToDelete));
             setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
         } catch (error) {
             console.log(error);
@@ -115,7 +116,7 @@ const CalendarView: React.FC = () => {
 };
 
 // returns list of users with their usernames and displaynames
-async function getDisplayNames(usernames: string[]): Promise<User[]> {
+export async function getUsers(usernames: string[]): Promise<User[]> {
     const displayNames = await Promise.all(usernames.map(async (username: string) => {
         const user = await getDoc(doc(db, 'User', username));
 

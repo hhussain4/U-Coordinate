@@ -11,18 +11,18 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ groups }) => {
             {groups.map((group, index) => (
                 <div key={index} className="group">
                     <div className="group-name">
-                        {group.getName()}
+                        {group.name}
                     </div>
                     <div className="group-members">
                         <p>Admins: </p>
                         <ul>
-                            {group.getAdmins().map((admin, i) => (
+                            {group.admins.map((admin, i) => (
                                 <li key={i}>{admin.displayName}</li>
                             ))}
                         </ul>
                         <p>Members: </p>
                         <ul>
-                            {group.getMembers().map((member, i) => (
+                            {group.members.map((member, i) => (
                                 <li key={i}>{member.displayName}</li>
                             ))}
                         </ul>
