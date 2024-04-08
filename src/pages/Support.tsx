@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import '@styles/Pages.css';
+import { db, auth } from '../config/firebase';
+import { addDoc, collection } from 'firebase/firestore';
 
 const Support: React.FC = () => {
-    const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [filteredResults, setFilteredResults] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -15,7 +15,8 @@ const Support: React.FC = () => {
         durationFrom: '',
         durationTo: '',
         reasons: '',
-        description: ''
+        description: '',
+        //userEmail: ''
     });
 
     // Dummy data for demonstration
@@ -47,13 +48,24 @@ const Support: React.FC = () => {
         setTicketData({ ...ticketData, [name]: value });
     };
 
-    const handleTicketSubmission = () => {
-        // Here you can handle submitting the ticket data, e.g., sending it to an API
-        console.log(ticketData);
-        // Navigate to ViewTickets page with ticket data
-        navigate('/viewtickets', { state: ticketData }); // Pass ticketData directly
-        // Close the modal after submitting the ticket
-        setIsModalOpen(false);
+    const handleTicketSubmission = async () => {
+        try {
+            // Get the current user
+            const user = auth.currentUser;
+            if (user) {
+                // Add the user's email to the ticket data
+                const ticketWithUser = { ...ticketData, userId: user.uid, userEmail: user.email };
+                // Add the ticket data to Firestore
+                await addDoc(collection(db, "tickets"), ticketWithUser);
+                console.log("Ticket submitted successfully");
+                // Close the modal after submitting the ticket
+                setIsModalOpen(false);
+            } else {
+                console.error("No user signed in.");
+            }
+        } catch (error) {
+            console.error("Error adding ticket: ", error);
+        }
     };
 
     // useEffect to set the initial date and time values
@@ -71,6 +83,20 @@ const Support: React.FC = () => {
             date: formattedDate,
             time: formattedTime
         });
+
+        // Fetch user information when component mounts
+        const fetchUserInfo = async () => {
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    setTicketData((prevState: any) => ({ ...prevState, userEmail: user.email }));
+                }
+            } catch (error) {
+                console.error('Error fetching user information: ', error);
+            }
+        };
+
+        fetchUserInfo();
     }, []); // Empty dependency array to run the effect only once on component mount
 
     return (
@@ -140,6 +166,8 @@ const Support: React.FC = () => {
                                 <input type="text" name="description" value={ticketData.description} onChange={handleTicketInputChange} />
                             </div>
                         )}
+                        <label>User Email:</label>
+                        <input type="text" value={ticketData.userEmail} readOnly />
                         <button onClick={handleTicketSubmission}>Submit</button>
                         <button onClick={() => setIsModalOpen(false)}>Cancel</button>
                     </div>

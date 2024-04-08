@@ -73,7 +73,7 @@ function App() {
             <Route path="/groups" element={<GroupView />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/support" element={<Support />} />
-            <Route path="/tickets" element={<ViewTickets />} />
+            <Route path="/viewtickets" element={<ViewTickets />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
