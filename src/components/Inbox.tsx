@@ -21,13 +21,6 @@ const Inbox: React.FC = () => {
         setOpen(false);
         if (!notification.read) {
             updateDoc(doc(db, 'Notification', notification.id), { read: true });
-            const updatedNotification = { ...notification, read: true };
-            setNotifications(prevNotifications =>
-                prevNotifications.map(prevNotif =>
-                    prevNotif.id === notification.id ? updatedNotification : prevNotif
-                )
-            );
-            setUnreadNotifications(unreadNotifications - 1);
         }
     };
 
@@ -41,7 +34,7 @@ const Inbox: React.FC = () => {
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const notifs = querySnapshot.docs.map(doc => {
                 const data = doc.data();
-                return new Notification(doc.id, data.title, data.sender, data.info, data.priority, data.read);
+                return new Notification(data.title, data.sender, data.info, data.priority, data.read, doc.id);
             });
             setNotifications(notifs);
             setUnreadNotifications(notifs.filter(e => !e.read).length);
