@@ -1,32 +1,42 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { GroupContext, UserContext } from 'src/App';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from 'src/config/firebase';
 import { Group } from '@classes/Group';
-import { User } from '@classes/User';
 import GroupDetails from '@components/GroupDetails';
 import CreateGroup from '@components/CreateGroup';
 import '@styles/Pages.css';
 
 const GroupView: React.FC = () => {
+    const [user] = useContext(UserContext);
+    const [groups] = useContext(GroupContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+
+    const openModal = () => {
+        if (!user) {
+            alert('Sign in to use this feature');
+            return;
+        }
+        setIsModalOpen(true);
+    }
     const closeModal = () => setIsModalOpen(false);
 
-    const [groups, setGroups] = useState<Group[]>(() => {
-        // retrieves groups from local storage
-        const savedGroups = localStorage.getItem("groups");
-        if (!savedGroups) return [];
-
-        const parsedGroups = JSON.parse(savedGroups);
-        return parsedGroups.map((group: any) => {
-            return new Group(group.name,
-                group.admins.map((admin: any) => new User(admin.username, admin.displayName)),
-                group.members.map((member: any) => new User(member.username, member.displayName)));
-        })
-    });
-
-    const addGroup = (newGroup: Group) => {
-        const updatedGroups = [...groups, newGroup];
-        setGroups(updatedGroups);
-        localStorage.setItem('groups', JSON.stringify(updatedGroups));
+    const addGroup = async (newGroup: Group) => {
+        try {
+            const admins = newGroup.admins.map(admin => admin.username);
+            const members = newGroup.members.map(member => member.username);
+            addDoc(collection(db, 'Group'), {
+                name: newGroup.name,
+                admins: admins,
+                members: members
+            });
+            // notify members of groups creation
+            const notification = newGroup.getCreationNotification(user!);
+            [...admins, ...members].forEach(username => notification.notify(username));
+        } catch (error) {
+            console.log(error);
+            alert('An error occured while creating group');
+        }
     };
 
     return (
@@ -39,7 +49,7 @@ const GroupView: React.FC = () => {
             <div className='empty'>
                 {groups.length == 0 && <p>No groups to display</p>}
             </div>
-            <CreateGroup isOpen={isModalOpen} onClose={closeModal} addGroup={addGroup} />
+            {isModalOpen && <CreateGroup onClose={closeModal} addGroup={addGroup} />}
         </>
     );
 }

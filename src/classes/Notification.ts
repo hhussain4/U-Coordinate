@@ -1,52 +1,34 @@
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "src/config/firebase";
+
 export class Notification {
-    private title: string;
-    private info: string;
-    private priority: number;
-    private read = false;
+    title: string;
+    sender: string;
+    info: string;
+    priority: number;
+    read: boolean;
+    id: string;
 
-    constructor(title: string, info: string, priority: number) {
+    constructor(title: string, sender: string, info: string, priority: number, read: boolean = false, id: string = '') {
         this.title = title;
+        this.sender = sender;
         this.info = info;
         this.priority = priority;
-    }
-
-    Notify() {
-        // implementation
-    }
-
-    // getters
-    getTitle() {
-        return this.title;
-    }
-
-    getInfo() {
-        return this.info;
-    }
-
-    getPriority() {
-        return this.priority;
-    }
-
-    isRead() {
-        return this.read;
-    }
-
-    // setters
-    setTitle(title: string) {
-        this.title = title;
-    }
-
-    setInfo(info: string) {
-        this.info = info;
-    }
-
-    setPriority(priority: number) {
-        this.priority = priority;
-    }
-
-    setRead(read: boolean) {
         this.read = read;
+        this.id = id;
+    }
+
+    // sends a notification to the specified user
+    notify(username: string) {
+        addDoc(collection(db, 'Event'), {
+            title: this.title,
+            sender: this.sender,
+            info: this.info,
+            priority: this.priority,
+            user_id: username,
+            read: false
+        }).catch(error => {
+            console.log(`An error occured while notifying ${username}, ${error}`);
+        });
     }
 }
-
-module.exports = Notification;

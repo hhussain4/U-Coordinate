@@ -1,0 +1,19 @@
+.ticket-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #f9f9f9;
+}
+
+.ticket-box p {
+    margin: 8px 0;
+}
+
+/* Adjust styles as needed */
+
+.user-email-input::placeholder {
+    color: #999;
+    /* Change color as needed */
+    font-style: italic;
+}

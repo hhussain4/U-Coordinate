@@ -1,0 +1,36 @@
+.header {
+    text-align: center;
+}
+
+.back-button {
+    border-radius: 50%;
+    background-color: white;
+    border: none;
+    color: gray;
+    cursor: pointer;
+    float: left;
+    font-size: 20px;
+    padding-left: 12px;
+    position: absolute;
+    left: 0;
+
+    &:hover {
+        background-color: white;
+    }
+}
+
+.dark-mode {
+    .back-button {
+        background-color: #35374b;
+        color: lightgray;
+        &:hover{
+            background-color: #35374b;
+        }
+    }
+}
+/* this one is temporary */
+.empty {
+    color: gray;
+    display: flex;
+    justify-content: center;
+}

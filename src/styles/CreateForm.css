@@ -33,6 +33,10 @@
   cursor: pointer;
   float: right;
   font-size: 20px;
+
+  &:hover {
+    background-color: white;
+  }
 }
 
 form>label {
@@ -42,16 +46,19 @@ form>label {
 
 form>label>input,
 form>label>textarea {
+  border-radius: 5px;
   display: block;
   width: 100%;
   margin-top: 5px;
+  background-color: white;
+  color: black;
 }
 
 .err-msg {
-  color:red;
+  color: red;
 }
 
-button[type="submit"] {
+.submit-button {
   cursor: pointer;
   padding: 10px;
   background-color: #007bff;
@@ -59,4 +66,58 @@ button[type="submit"] {
   border: none;
   border-radius: 5px;
   margin-top: 10px;
+
+  &:hover {
+    background-color: #0069d9;
+  }
+}
+
+/* dark mode styles */
+
+.dark-mode {
+  color: white;
+
+  .modal {
+    background-color: #232D3F;
+  }
+
+  form>label>input,
+  form>label>textarea {
+    background-color: #333;
+    border-color: gray;
+    color: white;
+  }
+
+  .modal-close-btn,
+  .modal-close-btn:hover {
+    background-color: #232D3F;
+  }
+
+  .submit-button {
+    background-color: #005B41;
+  }
+
+  /* multi select styles*/
+  .optionContainer,
+  .searchWrapper {
+    background-color: #333;
+    border-color: gray;
+  }
+
+  .chip {
+    background-color: #005b41;
+  }
+
+  .option {
+    background-color: #333;
+
+    &:hover {
+      background-color: #005b41;
+    }
+  }
+
+  .highlightOption {
+    background-color: #005b41;
+    color: #fff;
+  }
 }
