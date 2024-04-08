@@ -20,7 +20,7 @@ export class Notification {
 
     // sends a notification to the specified user
     notify(username: string) {
-        addDoc(collection(db, 'Event'), {
+        addDoc(collection(db, 'Notification'), {
             title: this.title,
             sender: this.sender,
             info: this.info,
