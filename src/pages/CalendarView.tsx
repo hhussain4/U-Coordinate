@@ -65,7 +65,7 @@ const CalendarView: React.FC = () => {
     const addEvent = async (newEvent: Event) => {
         try {
             const members = newEvent.members.map(member => member.username);
-            addDoc(collection(db, 'Event'), {
+            await addDoc(collection(db, 'Event'), {
                 name: newEvent.name,
                 description: newEvent.description,
                 start: newEvent.start.getTime(),
@@ -92,6 +92,9 @@ const CalendarView: React.FC = () => {
     const handleDeleteEvent = async (eventToDelete: Event) => {
         try {
             await deleteDoc(doc(db, 'Event', eventToDelete.id));
+            // notify users of event deletion
+            const notification = eventToDelete.getDeleteNotification(user!, 3);
+            eventToDelete.members.map(member => member.username).forEach((username => notification.notify(username)));
             setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
         } catch (error) {
             console.log(error);
