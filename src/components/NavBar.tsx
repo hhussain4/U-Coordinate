@@ -61,7 +61,7 @@ const NavBar: React.FC = () => {
                 </button>
                 {open &&
                     <div className="user-options">
-                        <a href="./settings">Settings</a>
+                        {user && <a href="./settings">Settings</a>}
                         <a href="./" onClick={logout}>{user ? "Log out" : "Sign in"}</a>
                     </div>}
             </div>

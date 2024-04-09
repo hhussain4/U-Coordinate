@@ -13,6 +13,7 @@ const CalendarView: React.FC = () => {
     const [user] = useContext(UserContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [events, setEvents] = useState<Event[]>([]);
+    const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>([]);
 
     // retrieves events only if the user is logged in
     useEffect(() => {
@@ -20,6 +21,7 @@ const CalendarView: React.FC = () => {
             setEvents([]);
             return;
         }
+        let initialLoad = true;
         const q = query(collection(db, 'Event'), where('members', "array-contains", user?.username));
         const unsubscribe = onSnapshot(q, async (querySnapshot) => {
             const events = querySnapshot.docs.map(async (doc) => {
@@ -31,22 +33,16 @@ const CalendarView: React.FC = () => {
             const resolvedEvents = await Promise.all(events);
             const sortedEvents = resolvedEvents.sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
             setEvents(sortedEvents);
+            
+             // diplays todays events on initial load of the calendar page
+            if (initialLoad) {
+                setSelectedDayEvents(getEventsOnDate(sortedEvents, new Date()));
+                initialLoad = false;
+            }
         });
 
         () => unsubscribe();
     }, [user]);
-
-    //filter for events that start today
-    const today = new Date();
-    const todayEvents = events.filter(event => {
-        const eventStart = new Date(event.start);
-        return eventStart.getDate() === today.getDate() &&
-            eventStart.getMonth() === today.getMonth() &&
-            eventStart.getFullYear() === today.getFullYear();
-    });
-
-    //adding state to store the selected date's events
-    const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>(todayEvents);
 
     const handleOpenModal = () => {
         if (!user) {
@@ -94,7 +90,7 @@ const CalendarView: React.FC = () => {
             await deleteDoc(doc(db, 'Event', eventToDelete.id));
             // notify users of event deletion
             const notification = eventToDelete.getDeleteNotification(user!, 3);
-            eventToDelete.members.map(member => member.username).forEach((username => notification.notify(username)));
+            eventToDelete.members.map(member => member.username).forEach(username => notification.notify(username));
             setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(event => event !== eventToDelete));
         } catch (error) {
             console.log(error);
@@ -130,6 +126,16 @@ export async function getUsers(usernames: string[]): Promise<User[]> {
         }
     }));
     return displayNames;
+}
+
+// returns a list of events happening on a certain day
+function getEventsOnDate(eventlist: Event[], day: Date) {
+    return eventlist.filter(event => {
+        const eventStart = new Date(event.start);
+        return eventStart.getDate() === day.getDate() &&
+            eventStart.getMonth() === day.getMonth() &&
+            eventStart.getFullYear() === day.getFullYear();
+    });
 }
 
 export default CalendarView;

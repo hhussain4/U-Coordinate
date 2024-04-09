@@ -41,7 +41,7 @@ const Inbox: React.FC = () => {
                 const data = doc.data();
                 return new Notification(data.title, data.sender, data.info, data.priority, new Date(data.date), data.read, doc.id);
             });
-            const orderedNotifs = notifs.sort(((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()));
+            const orderedNotifs = notifs.sort(((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf()));
             setNotifications(orderedNotifs);
             setUnreadNotifications(notifs.filter(e => !e.read).length);
         });

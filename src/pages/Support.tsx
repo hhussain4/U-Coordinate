@@ -92,16 +92,12 @@ const Support: React.FC = () => {
         setFilteredResults(filtered);
     };
 
-
-
-    // Handler for input change
     // Handler for input change
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const query = event.target.value;
         setSearchQuery(query);
         filterFaqs(query);
     };
-
 
     // Handler for filing a ticket button click
     const handleFileTicket = () => {
@@ -116,6 +112,7 @@ const Support: React.FC = () => {
         const { name, value } = event.target;
         setTicketData({ ...ticketData, [name]: value });
     };
+
     const handlePostFAQ = async () => {
         try {
             // Add the FAQ data to Firestore
