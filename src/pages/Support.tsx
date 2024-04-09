@@ -29,15 +29,13 @@ interface ErrorData {
     time: string;
     subject: string;
     user: string;
-    question: string;
-    answer: string;
+    
 }
-
 
 const Support: React.FC = () => {
 
     const [user] = useContext(UserContext);
-    const [errors, setErrors] = useState<ErrorData>({ date: "", description: "", time: "", subject: "", user: "" , question: "",answer: ""});
+    const [errors, setErrors] = useState<ErrorData>({ date: "", description: "", time: "", subject: "", user: "" });
     const [showFAQPopup, setShowFAQPopup] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>('');
     const [answer, setAnswer] = useState<string>('');
@@ -138,20 +136,15 @@ const Support: React.FC = () => {
     const handleTicketSubmission = async () => {
         try {
             // Get the current user
-            const errorMsg: ErrorData = { date: "", description: "", time: "", subject: "", user: "", question: "", answer: "" };
+            const errorMsg: ErrorData = { date: "", description: "", time: "", subject: "", user: "" };
 
             const description = ticketData.description.trim();
             const start = ticketData.durationFrom;
             const end = ticketData.durationTo;
             const subject = ticketData.subject.trim();
-            const question = ticketData.subject.trim();
-            const answer = ticketData.subject.trim();
 
             if (!description) {
                 errorMsg.description = "Please provide a description";
-            }
-            if (!question) {
-                errorMsg.question = "Please provide a description";
             }
             if ((!start || !end) && (ticketData.category === 'TimeOff')) {
                 errorMsg.time = "Please provide a start and end date";
