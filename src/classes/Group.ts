@@ -7,7 +7,7 @@ export class Group {
     admins: User[];
     id: string;
 
-    constructor(name: string, admins?: User[], members?: User[], id: string = '') {
+    constructor(name: string = '', admins?: User[], members?: User[], id: string = '') {
         this.name = name;
         this.admins = admins || [];
         this.members = members || [];
@@ -36,6 +36,38 @@ export class Group {
         const title = `New group created: ${this.name}`;
         const sender = `${user.displayName}: ${user.username}`
         const info = `${user.displayName} has added you to a group: ${this.name}`;
+        return new Notification(title, sender, info, 3);
+    }
+
+    // for notifying users of group deletion
+    getDeleteNotification(user: User): Notification {
+        const title = `Group disbanded: ${this.name}`;
+        const sender = `${user.displayName}: ${user.username}`
+        const info = `${user.displayName} has deleted the group: ${this.name}`;
+        return new Notification(title, sender, info, 3);
+    }
+
+    // for notifying users of group name change
+    getNameChangeNotification(user: User, oldName: string) {
+        const title = `Group name changed from ${oldName} to ${this.name}`;
+        const sender = `${user.displayName}: ${user.username}`
+        const info = `${user.displayName} has changed the name of the group to : ${this.name}`;
+        return new Notification(title, sender, info, 3);
+    }
+
+    // for notifying users of addition to group
+    getAddNotification(user: User) {
+        const title = `You have been added to ${this.name}`;
+        const sender = `${user.displayName}: ${user.username}`
+        const info = `${user.displayName} has added you to the group: ${this.name}`;
+        return new Notification(title, sender, info, 3);
+    }
+
+    // for notifying users of removal from group
+    getRemoveNotification(user: User) {
+        const title = `You have been removed from ${this.name}`;
+        const sender = `${user.displayName}: ${user.username}`
+        const info = `${user.displayName} has removed you from the group: ${this.name}`;
         return new Notification(title, sender, info, 3);
     }
 }

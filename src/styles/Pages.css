@@ -40,17 +40,58 @@
 }
 
 .group-name {
+    display: flex;
     border-bottom: 2px solid black;
     border-radius: 10px 10px 0 0;
     background-color: #f1ece4;
     padding: 10px;
-    font-size: large;
-    font-weight: bold;
     overflow-wrap: break-word;
+
+    h3 {
+        margin: auto;
+    }
 }
 
 .group-members {
     padding: 10px;
+}
+
+.group-dropdown {
+    position: relative;
+}
+
+.group-button {
+    background-color: #f1ece4;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: large;
+
+    &:hover {
+        background-color: lightgray;
+    }
+}
+
+.group-options {
+    border-radius: 5px;
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.group-option-btn {
+    background-color: #ebebeb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 2px;
+    padding: 5px;
+}
+
+.group-option-btn:hover {
+    background-color: lightgray;
 }
 
 .empty {
@@ -59,31 +100,18 @@
     justify-content: center;
 }
 
-.dark-mode {
-    .create-button {
-        background-color: #005B41;
-    }
-
-    .group-name {
-        background-color: #5e75af;
-    }
-
-    .group-members {
-        background-color: #717a93;
-        border-radius: 0px 0px 10px 10px;
-    }
-}
 .search-bar {
     width: 45%;
     height: 30px;
     font-size: 14px;
     padding: 5px;
 }
+
 .search-container {
     display: flex;
     justify-content: center;
 }
-/* In your Pages.css file */
+
 .file-ticket-btn {
     position: fixed;
     bottom: 20px;
@@ -96,13 +124,12 @@
     padding: 10px 20px;
     cursor: pointer;
     z-index: 1000;
-    /* Ensure the button is above other content */
 }
-/* In your Pages.css file */
+
 .page-list {
     margin: 20px;
-    /* Adjust the margin as needed */
 }
+
 .input-group {
     margin-bottom: 10px;
 }
@@ -119,4 +146,39 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+/* dark mode styles */
+.dark-mode {
+    .create-button {
+        background-color: #005B41;
+    }
+
+    .group {
+        background-color: #717a93;
+    }
+
+    .group-name {
+        background-color: #5e75af;
+
+    }
+
+    .group-members {
+        background-color: #717a93;
+        border-radius: 0px 0px 10px 10px;
+    }
+
+    .group-button {
+        background-color: #5e75af;
+        color: lightgray;
+    }
+
+    .group-option-btn {
+        background-color: #03815d;
+        color: white;
+
+        &:hover {
+            background-color: #03694c;
+        }
+    }
 }
