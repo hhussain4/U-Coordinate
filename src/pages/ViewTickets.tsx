@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '@styles/ViewTickets.css'; // Assuming you have a CSS file for ViewTickets
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import '@styles/Pages.css';
 
 const ViewTickets: React.FC = () => {
     const [tickets, setTickets] = useState<any[]>([]);
@@ -9,12 +10,12 @@ const ViewTickets: React.FC = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const ticketsCollection = collection(db, 'tickets');
+                const ticketsCollection = collection(db, 'Tickets');
                 const snapshot = await getDocs(ticketsCollection);
                 const ticketData = snapshot.docs.map(doc => {
                     const data = doc.data();
                     // Assuming the user email is stored in the document
-                    const userEmail = data.userEmail; // Adjust this according to your database structure
+                    const userEmail = data.user_id; // Adjust this according to your database structure
                     return { id: doc.id, ...data, userEmail };
                 });
                 setTickets(ticketData);
@@ -28,7 +29,9 @@ const ViewTickets: React.FC = () => {
 
     const handleDeleteTicket = async (ticketId: string) => {
         try {
-            await deleteDoc(doc(db, 'tickets', ticketId));
+            // Delete the ticket document from Firestore
+            await deleteDoc(doc(db, 'Tickets', ticketId));
+            // Remove the deleted ticket from the local state
             setTickets(tickets.filter(ticket => ticket.id !== ticketId));
         } catch (error) {
             console.error('Error deleting ticket: ', error);
@@ -37,26 +40,61 @@ const ViewTickets: React.FC = () => {
 
     return (
         <div className="ticket-container">
-            <h2>View Tickets</h2>
+            <div id="pageTitle" >  <h2>View Tickets</h2> {/* Need to center this later */} </div>
             {/* Display ticket information */}
             {tickets.map((ticket, index) => (
                 <div className="ticket-box" key={index}>
-                    <p>User Email: {ticket.userEmail}</p>
-                    <p>Date: {ticket.date}</p>
-                    <p>Time: {ticket.time}</p>
-                    <p>Subject: {ticket.subject}</p>
-                    <p>Category: {ticket.category}</p>
-                    {ticket.category === 'TimeOff' && (
-                        <div>
-                            <p>Duration From: {ticket.durationFrom}</p>
-                            <p>Duration To: {ticket.durationTo}</p>
-                            <p>Reasons: {ticket.reasons}</p>
-                        </div>
-                    )}
-                    {(ticket.category === 'Bug' || ticket.category === 'Policy' || ticket.category === 'General' || ticket.category === 'Account') && (
-                        <p>Description: {ticket.description}</p>
-                    )}
-                    <button onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td> User Email: </td>
+                                <td> {ticket.userEmail} </td>
+                            </tr>
+                            <tr>
+                                <td> Date: </td>
+                                <td> {ticket.date} </td>
+                            </tr>
+                            <tr>
+                                <td> Time:  </td>
+                                <td> {ticket.time} </td>
+                            </tr>
+                            <tr>
+                                <td> Subject:  </td>
+                                <td> {ticket.subject} </td>
+                            </tr>
+                            <tr>
+                                <td> Category:  </td>
+                                <td> {ticket.category} </td>
+                            </tr>
+
+
+                            <tr>  {ticket.category === 'TimeOff' && (
+                                <div>
+                                    <tr>
+                                        <td> Start: </td>
+                                        <td> {ticket.durationFrom} </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> End: </td>
+                                        <td> {ticket.durationTo} </td>
+                                    </tr>
+                                    <tr>
+                                        <td> Reason: </td>
+                                        <td> {ticket.reasons} </td>
+                                    </tr>
+                                </div>
+                            )}
+                            </tr>
+
+                            <tr>  {(ticket.category === 'Bug' || ticket.category === 'Policy' || ticket.category === 'General' || ticket.category === 'Account') && (
+                                <><td> Description: </td><td> {ticket.description} </td></>)}
+                            </tr>
+                            <tr>
+                                <button className="deleteTicketBtn" onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             ))}
         </div>

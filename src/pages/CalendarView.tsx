@@ -72,7 +72,7 @@ const CalendarView: React.FC = () => {
                 recur_times: newEvent.recurTimes
             });
             // notify all members of the event's creation
-            const notification = newEvent.getCreationNotification(user!, 3);
+            const notification = newEvent.getCreationNotification(user!, 3);//make NOTIFICARIon
             members.forEach(username => notification.notify(username));
         } catch (error) {
             console.log(error);
