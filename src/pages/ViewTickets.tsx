@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '@styles/ViewTickets.css'; // Assuming you have a CSS file for ViewTickets
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import '@styles/Pages.css';
 
 const ViewTickets: React.FC = () => {
     const [tickets, setTickets] = useState<any[]>([]);
@@ -9,7 +10,7 @@ const ViewTickets: React.FC = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const ticketsCollection = collection(db, 'tickets');
+                const ticketsCollection = collection(db, 'Tickets');
                 const snapshot = await getDocs(ticketsCollection);
                 const ticketData = snapshot.docs.map(doc => {
                     const data = doc.data();

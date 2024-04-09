@@ -83,11 +83,24 @@
     display: flex;
     justify-content: center;
 }
+.post-faq-btn {
+    background-color: #6c757d;
+    /* Change the background color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1000;
+    bottom: 20px;
+    left: 20%;
+    position: fixed;
+}
 /* In your Pages.css file */
 .file-ticket-btn {
     position: fixed;
     bottom: 20px;
-    left: 50%;
+    left: 80%;
     transform: translateX(-50%);
     background-color: #007bff;
     color: white;
@@ -96,6 +109,7 @@
     padding: 10px 20px;
     cursor: pointer;
     z-index: 1000;
+ 
     /* Ensure the button is above other content */
 }
 /* In your Pages.css file */
