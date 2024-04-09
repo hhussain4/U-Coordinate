@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Notification } from "@classes/Notification";
 import { db } from '../config/firebase';
 import { UserContext } from "src/App";
-import { collection, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import '@styles/Inbox.css';
 
 const Inbox: React.FC = () => {
@@ -28,15 +28,21 @@ const Inbox: React.FC = () => {
         setSelectedNotification(null);
     };
 
+    const deleteNotification = (notification: Notification) => {
+        deleteDoc(doc(db, 'Notification', notification.id));
+        setSelectedNotification(null);
+    } 
+
     // gets the user's notifications
     useEffect(() => {
         const q = query(collection(db, 'Notification'), where('user_id', '==', user?.username));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const notifs = querySnapshot.docs.map(doc => {
                 const data = doc.data();
-                return new Notification(data.title, data.sender, data.info, data.priority, data.read, doc.id);
+                return new Notification(data.title, data.sender, data.info, data.priority, new Date(data.date), data.read, doc.id);
             });
-            setNotifications(notifs);
+            const orderedNotifs = notifs.sort(((a, b) => new Date(a.date).valueOf() - new Date(b.date).valueOf()));
+            setNotifications(orderedNotifs);
             setUnreadNotifications(notifs.filter(e => !e.read).length);
         });
 
@@ -74,7 +80,7 @@ const Inbox: React.FC = () => {
                                 <div className="unread">{!notification.read && <p>&#8226;</p>}</div>
                                 <div className="notif-info">
                                     <div className="notif-title">{notification.title}</div>
-                                    <div className="notif-sender">{notification.sender}</div>
+                                    <div className="notif-date">{notification.date.toLocaleDateString()}</div>
                                 </div>
                             </div>
                         ))}
@@ -95,6 +101,7 @@ const Inbox: React.FC = () => {
                             <p><strong>Priority:</strong> {selectedNotification.priority}</p>
                             <p>{selectedNotification.info}</p>
                         </div>
+                        <button className="delete-noti" onClick={() => deleteNotification(selectedNotification)}>Delete</button>
                     </div>
                 </div>
             )}

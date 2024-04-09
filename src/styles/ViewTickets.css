@@ -2,18 +2,63 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 16px;
-    margin-bottom: 16px;
     background-color: #f9f9f9;
+    display: flex;
+    width: 80%; 
+    text-align: left; 
+    margin: 12px auto; 
+
+}
+
+.ticket-container {
+    align-content: center; 
 }
 
 .ticket-box p {
     margin: 8px 0;
 }
 
-/* Adjust styles as needed */
+#pageTitle {
+    text-align: center; 
+}
+
+.deleteTicketBtn {
+    width: 80px;
+    height: 35px;
+    margin: 10px;
+    margin-left: 0px;
+    display: block;
+    
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+        background-color: #0069d9;
+    }
+}
 
 .user-email-input::placeholder {
     color: #999;
     /* Change color as needed */
     font-style: italic;
+}
+
+.dark-mode {
+    .ticket-box{
+        background-color: rgb(96 98 128);
+        border-color: rgb(86, 86, 86);
+    }
+
+    .deleteTicketBtn {
+        background-color: #03815d;
+        color: white;
+
+        &:hover {
+            background-color: #03694c;
+        }
+    }
 }
