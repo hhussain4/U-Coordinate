@@ -3,7 +3,7 @@ import { db, auth } from '../config/firebase';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { UserContext } from 'src/App';
 import FAQ from '@components/FAQ';
-import '@styles/Pages.css';
+import '@styles/Support.css';
 
 interface Result {
     id: string;
