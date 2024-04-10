@@ -187,8 +187,10 @@ const Support: React.FC = () => {
                 {filteredResults.length > 0 ? (
                     filteredResults.map(faq => (
                         <div key={faq.id} className='faq-item'>
+                            <div>
                             <h3>{faq.question}</h3>
                             <p>{faq.answer}</p>
+                            </div>
                         </div>
                     ))
                 ) : (

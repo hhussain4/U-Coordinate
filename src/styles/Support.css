@@ -1,0 +1,83 @@
+.header {
+    text-align: center;
+}
+
+.title {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.search-bar {
+    width: 45%;
+    height: 30px;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+}
+.post-faq-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1000;
+    bottom: 20px;
+    left: 20%;
+    position: fixed;
+}
+
+.file-ticket-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 80%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.faq-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    display: flex;
+    width: 80%; 
+    text-align: left; 
+    margin: 12px auto; 
+}
+
+/* dark mode styles */
+.dark-mode {
+    .faq-item {
+        background-color: rgb(96 98 128);
+        border-color: rgb(86, 86, 86);
+    }
+
+    .file-ticket-btn {
+        background-color: #03815d;
+        color: white;
+
+        &:hover {
+            background-color: #03694c;
+        }
+    }
+
+    .post-faq-btn {
+        background-color: #03815d;
+        color: white;
+
+        &:hover {
+            background-color: #03694c;
+        }
+    }
+}
