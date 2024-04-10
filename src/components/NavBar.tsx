@@ -50,7 +50,7 @@ const NavBar: React.FC = () => {
                     <a href="./tickets">Tickets</a>
                 </div>
             </div>
-            {user?.theme === "light" ? <img src='../../logo.png'></img> : <img src='../../darkLogo.png'></img>}
+            <img src='../../logo.png'></img>
             <div className='dark-mode-toggle'>
                 <DarkModeToggle />
             </div>
