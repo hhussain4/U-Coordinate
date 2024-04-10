@@ -54,6 +54,14 @@ form>label>textarea {
   color: black;
 }
 
+.select-options select {
+  border-radius: 5px;
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px 0;
+}
+
 .err-msg {
   color: red;
 }
@@ -82,7 +90,8 @@ form>label>textarea {
   }
 
   form>label>input,
-  form>label>textarea {
+  form>label>textarea,
+  select {
     background-color: #333;
     border-color: gray;
     color: white;
