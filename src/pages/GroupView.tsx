@@ -1,11 +1,12 @@
 import { useContext, useState } from 'react';
 import { GroupContext, UserContext } from 'src/App';
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/config/firebase';
 import { Group } from '@classes/Group';
 import GroupDetails from '@components/GroupDetails';
 import CreateGroup from '@components/CreateGroup';
 import EditGroup from '@components/EditGroup';
+import CreateAnnouncement from '@components/CreateAnnouncement';
 import '@styles/Pages.css';
 
 const GroupView: React.FC = () => {
@@ -44,7 +45,7 @@ const GroupView: React.FC = () => {
     };
 
     // group options
-    const editGroup = async (group: Group) => {
+    const editGroup = (group: Group) => {
         setManageGroup(group);
         setIsEditModalOpen(true);
     }
@@ -63,9 +64,21 @@ const GroupView: React.FC = () => {
         }
     };
 
-    const makeAnnouncement = async (group: Group) => {
+    const makeAnnouncement = (group: Group) => {
         setManageGroup(group);
         setIsAnnounceModalOpen(true);
+    }
+
+    const leaveGroup = async (group: Group) => {
+        try {
+            const members = group.members.filter(member => member.username != user?.username);
+            await updateDoc(doc(db, 'Group', group.id), {members: members});
+            const notification = group.getLeaveNotification(user!);
+            group.admins.forEach(admin => notification.notify(admin.username));
+        } catch (error) {
+            console.log(error);
+            alert("Error occured while leaving group");
+        }
     }
 
     return (
@@ -74,13 +87,13 @@ const GroupView: React.FC = () => {
                 <h2 className="title">Groups</h2>
                 <button className="create-button" onClick={openModal}>+</button>
             </div>
-            <GroupDetails groups={groups} onEdit={editGroup} onAnnounce={makeAnnouncement} onDelete={deleteGroup}/>
+            <GroupDetails groups={groups} onEdit={editGroup} onAnnounce={makeAnnouncement} onDelete={deleteGroup} onLeave={leaveGroup}/>
             <div className='empty'>
                 {groups.length == 0 && <p>No groups to display</p>}
             </div>
             {isCreateModalOpen && <CreateGroup onClose={closeModal} addGroup={addGroup} />}
             {isEditModalOpen && <EditGroup onClose={() => setIsEditModalOpen(false)} group={manageGroup} />}
-            {/* {isAnnounceModalOpen && <CreateAnnouncement onClose={() => setIsAnnounceModalOpen(false)} group={manageGroup} />} */}
+            {isAnnounceModalOpen && <CreateAnnouncement onClose={() => setIsAnnounceModalOpen(false)} group={manageGroup} />}
         </>
     );
 }

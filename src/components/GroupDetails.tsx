@@ -8,9 +8,10 @@ interface GroupDetailsProps {
     onEdit: (group: Group) => void;
     onAnnounce: (group: Group) => void;
     onDelete: (group: Group) => void;
+    onLeave: (group: Group) => void;
 }
 
-const GroupDetails: React.FC<GroupDetailsProps> = ({ groups, onEdit, onDelete, onAnnounce }) => {
+const GroupDetails: React.FC<GroupDetailsProps> = ({ groups, onEdit, onDelete, onAnnounce, onLeave }) => {
     const [user] = useContext(UserContext)
     // Makes open state of all the groups options initially set to false
     const [openStates, setOpenStates] = useState<boolean[]>(Array(groups.length).fill(false));
@@ -45,19 +46,21 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ groups, onEdit, onDelete, o
                 <div key={index} className="group">
                     <div className="group-name">
                         <h3>{group.name}</h3>
-                        {group.admins.map(admin => admin.username).includes(user?.username || '') &&
-                            <div className='group-dropdown' ref={e => groupMenus.current[index] = e}>
-                                <button className="group-button" onClick={() => handleDropdown(index)}>
-                                    <i className="fa-solid fa-ellipsis"></i>
-                                </button>
-                                {openStates[index] &&
-                                    <div className="group-options">
-                                        <button className="group-option-btn" onClick={() => onEdit(group)}> Edit </button>
-                                        <button className="group-option-btn" onClick={() => onAnnounce(group)}> Announcement </button>
-                                        <button className="group-option-btn" onClick={() => onDelete(group)}> Delete </button>
-                                    </div>}
-                            </div>
-                        }
+                        <div className='group-dropdown' ref={e => groupMenus.current[index] = e}>
+                            <button className="group-button" onClick={() => handleDropdown(index)}>
+                                <i className="fa-solid fa-ellipsis"></i>
+                            </button>
+                            {openStates[index] &&
+                                <div className="group-options">
+                                    {group.admins.map(admin => admin.username).includes(user!.username) ?
+                                        <>
+                                            <button className="group-option-btn" onClick={() => onEdit(group)}> Edit </button>
+                                            <button className="group-option-btn" onClick={() => onAnnounce(group)}> Announcement </button>
+                                            <button className="group-option-btn" onClick={() => onDelete(group)}> Delete </button>
+                                        </> :
+                                        <button className="group-option-btn" onClick={() => onLeave(group)}> Leave </button>}
+                                </div>}
+                        </div>
                     </div>
                     <div className="group-members">
                         <p>Admins: </p>

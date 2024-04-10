@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
-import '@styles/Pages.css';
+import { useState, useEffect, useContext } from 'react';
 import { db, auth } from '../config/firebase';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
-import FAQ from '../components/FAQ'; // Import the FAQ component
 import { UserContext } from 'src/App';
+import FAQ from '@components/FAQ';
+import '@styles/Pages.css';
 
 interface Result {
     id: string;
@@ -29,16 +29,12 @@ interface ErrorData {
     time: string;
     subject: string;
     user: string;
-    
 }
 
 const Support: React.FC = () => {
-
     const [user] = useContext(UserContext);
     const [errors, setErrors] = useState<ErrorData>({ date: "", description: "", time: "", subject: "", user: "" });
     const [showFAQPopup, setShowFAQPopup] = useState<boolean>(false);
-    const [question, setQuestion] = useState<string>('');
-    const [answer, setAnswer] = useState<string>('');
     const [faqs, setFaqs] = useState<any[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [filteredResults, setFilteredResults] = useState<Result[]>([]);
@@ -47,7 +43,7 @@ const Support: React.FC = () => {
         date: '',
         time: '',
         subject: '',
-        category: 'General', 
+        category: 'General',
         durationFrom: new Date(),
         durationTo: new Date(),
         reasons: '',
@@ -55,29 +51,12 @@ const Support: React.FC = () => {
         userEmail: ''
     });
 
-
-    const handleAddFAQ = async () => {
-        try {
-            // Add FAQ entry to the database
-            await addDoc(collection(db, 'FAQs'), { question, answer });
-            console.log('FAQ added successfully!');
-            // Close the FAQ popup
-            setShowFAQPopup(false);
-            // Clear the question and answer fields
-            setQuestion('');
-            setAnswer('');
-            // You can also fetch the FAQs again from the database to update the list immediately
-        } catch (error) {
-            console.error('Error adding FAQ: ', error);
-        }
-    };
-
     const fetchFAQs = async () => {
         try {
-            const faqsCollection = collection(db, 'FAQs');
-            const snapshot = await getDocs(faqsCollection);
-            const faqData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Result[];
+            const snapshot = await getDocs(collection(db, 'FAQs'));
+            const faqData = snapshot.docs.map(doc => ({ id: doc.id, question: doc.data().question, answer: doc.data().answer }));
             setFaqs(faqData);
+            setFilteredResults(faqData);
         } catch (error) {
             console.error('Error fetching FAQs: ', error);
         }
@@ -113,23 +92,6 @@ const Support: React.FC = () => {
         setTicketData({ ...ticketData, [name]: value });
     };
 
-    const handlePostFAQ = async () => {
-        try {
-            // Add the FAQ data to Firestore
-            await addDoc(collection(db, 'FAQs'), {
-                question: question,
-                answer: answer
-            });
-            // Reset the input fields after successful submission
-            setQuestion('');
-            setAnswer('');
-            console.log("FAQ posted successfully");
-            fetchFAQs();
-        } catch (error) {
-            console.error("Error posting FAQ: ", error);
-        }
-    };
-
     const handleTicketSubmission = async () => {
         try {
             // Get the current user
@@ -151,8 +113,6 @@ const Support: React.FC = () => {
             }
 
             //checking for valid inputs
-            const startDate = new Date(start);
-            const endDate = new Date(end);
             if ((start >= end) && (ticketData.category === 'TimeOff')) {
                 errorMsg.time = "Please provide a valid time range";
             }
@@ -189,19 +149,6 @@ const Support: React.FC = () => {
             date: formattedDate,
             time: formattedTime
         });
-        const fetchFAQs = async () => {
-            try {
-                const faqsCollection = collection(db, 'FAQs');
-                const snapshot = await getDocs(faqsCollection);
-                const faqData = snapshot.docs.map(doc => ({ id: doc.id, question: doc.data().question, answer: doc.data().answer }));
-                console.log('Fetched FAQs:', faqData); // Add this line
-                setFaqs(faqData);
-                setFilteredResults(faqData);
-            } catch (error) {
-                console.error('Error fetching FAQs: ', error);
-            }
-        };
-
         // Fetch user information when component mounts
         const fetchUserInfo = async () => {
             try {
@@ -212,13 +159,11 @@ const Support: React.FC = () => {
             } catch (error) {
                 console.error('Error fetching user information: ', error);
             }
-
         };
+
         fetchFAQs();
         fetchUserInfo();
-
-
-    }, []); // Empty dependency array to run the effect only once on component mount
+    }, []);
 
     return (
         <>
@@ -258,20 +203,7 @@ const Support: React.FC = () => {
                 {/* Post a FAQ button */}
                 <button onClick={() => setShowFAQPopup(true)} className='post-faq-btn'>Post a FAQ</button>
             </div>
-            {/* Render the FAQ popup conditionally */}
-            {showFAQPopup && (
-                <div className="modal-overlay">
-                    <div className="modal">
-                        <h2>Post a FAQ</h2>
-                        <label>Question:</label>
-                        <input type="text" value={question} onChange={(e) => setQuestion(e.target.value)} />
-                        <label>Answer:</label>
-                        <textarea value={answer} onChange={(e) => setAnswer(e.target.value)}></textarea>
-                        <button onClick={handleAddFAQ}>Submit</button>
-                        <button onClick={() => setShowFAQPopup(false)}>Cancel</button>
-                    </div>
-                </div>
-            )}
+            {showFAQPopup && <FAQ onClose={() => setShowFAQPopup(false)} updateFAQ={fetchFAQs} />}
             {/* File a Ticket button */}
             <button onClick={handleFileTicket} className='file-ticket-btn'>
                 File a Ticket

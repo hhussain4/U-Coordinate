@@ -1,49 +1,74 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from 'src/config/firebase';
+import '@styles/CreateForm.css';
 
 interface FAQProps {
-    onAddFAQ: (question: string, answer: string) => void;
+    onClose: () => void;
+    updateFAQ: () => void;
 }
 
-const FAQ: React.FC<FAQProps> = ({ onAddFAQ }) => {
-    const [question, setQuestion] = useState<string>('');
-    const [answer, setAnswer] = useState<string>('');
+interface ErrorData {
+    question: string;
+    answer: string;
+}
 
-    const handleAddFAQ = () => {
+const FAQ: React.FC<FAQProps> = ({ onClose, updateFAQ }) => {
+    const [errors, setErrors] = useState<ErrorData>({ question: '', answer: '' });
+    
+    const handleAddFAQ = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const errorMsg: ErrorData = { question: '', answer: '' };
+
+        const form = e.currentTarget;
+        const question = (form.elements.namedItem('question') as HTMLInputElement).value.trim();
+        const answer = (form.elements.namedItem('answer') as HTMLInputElement).value.trim();
+        
         // Check if both question and answer are not empty
-        if (question.trim() !== '' && answer.trim() !== '') {
-            // Call the onAddFAQ function with the question and answer
-            onAddFAQ(question.trim(), answer.trim());
-            // Clear the input fields
-            setQuestion('');
-            setAnswer('');
-        } else {
-            // Display an error message or handle the case where one of the fields is empty
-            // For example, show a toast message or highlight the empty fields
-            alert('Please enter both question and answer.');
+        if (!question) {
+            errorMsg.question = "Please provide a question";
+        }
+        if (!answer) {
+            errorMsg.answer = "Please provide an answer";
+        }
+
+        setErrors(errorMsg);
+        
+        // only add FAQ if there are no errors
+        if (Object.values(errorMsg).every((error) => !error)) {
+            addDoc(collection(db, 'FAQs'), {
+                question: question,
+                answer: answer
+            }).then(() => {
+                console.log("FAQ posted successfully");
+                onClose();
+                updateFAQ();
+            }).catch((error) => {
+                console.log(error);
+                alert("Error occured while creating FAQ");
+            });
         }
     };
 
     return (
-        <div className="faq-popup">
-            <h2>Post a FAQ</h2>
-            <div className="input-group">
-                <label htmlFor="question">Question:</label>
-                <input
-                    type="text"
-                    id="question"
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                />
+        <div className="modal-overlay">
+            <div className="modal">
+                <button className="modal-close-btn" onClick={onClose}>X</button>
+                <h2>Post a FAQ</h2>
+                <form onSubmit={handleAddFAQ}>
+                    <label>
+                        Question:
+                        <input type="text" name="question" />
+                        {errors.question && <div className="err-msg">{errors.question}</div>}
+                    </label>
+                    <label>
+                        Answer:
+                        <textarea name="answer" />
+                        {errors.answer && <div className="err-msg">{errors.answer}</div>}
+                    </label>
+                    <button className="submit-button" type="submit">Submit</button>
+                </form>
             </div>
-            <div className="input-group">
-                <label htmlFor="answer">Answer:</label>
-                <textarea
-                    id="answer"
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                />
-            </div>
-            <button onClick={handleAddFAQ}>Submit FAQ</button>
         </div>
     );
 };

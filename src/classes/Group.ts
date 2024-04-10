@@ -70,4 +70,12 @@ export class Group {
         const info = `${user.displayName} has removed you from the group: ${this.name}`;
         return new Notification(title, sender, info, 3);
     }
+
+    // notify admins of member leaving
+    getLeaveNotification(user: User) {
+        const title = `${user.displayName} left the group: ${this.name}`;
+        const sender = `${user.displayName}: ${user.username}`;
+        const info = `${user.displayName} has left the group: ${this.name}`;
+        return new Notification(title, sender, info, 3);
+    }
 }
