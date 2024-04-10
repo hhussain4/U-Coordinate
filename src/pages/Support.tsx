@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import '@styles/Pages.css';
+import '@styles/Support.css';
 import { db, auth } from '../config/firebase';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import FAQ from '../components/FAQ'; // Import the FAQ component
@@ -242,8 +242,10 @@ const Support: React.FC = () => {
                 {filteredResults.length > 0 ? (
                     filteredResults.map(faq => (
                         <div key={faq.id} className='faq-item'>
+                            <div>
                             <h3>{faq.question}</h3>
                             <p>{faq.answer}</p>
+                            </div>
                         </div>
                     ))
                 ) : (
