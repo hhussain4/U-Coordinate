@@ -108,7 +108,6 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   max-width: 40%;
-  max-height: 70%;
   overflow: auto;
   word-wrap: break-word;
 }

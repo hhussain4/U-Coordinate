@@ -71,7 +71,7 @@ const GroupView: React.FC = () => {
 
     const leaveGroup = async (group: Group) => {
         try {
-            const members = group.members.filter(member => member.username != user?.username);
+            const members = group.members.map(member => member.username).filter(member => member != user?.username);
             await updateDoc(doc(db, 'Group', group.id), {members: members});
             const notification = group.getLeaveNotification(user!);
             group.admins.forEach(admin => notification.notify(admin.username));

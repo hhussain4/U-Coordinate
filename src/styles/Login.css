@@ -21,9 +21,9 @@
   margin-bottom: 20px;
 }
 
-form>label {
+.login-box form>label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 input {

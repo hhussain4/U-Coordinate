@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import '@styles/ViewTickets.css'; // Assuming you have a CSS file for ViewTickets
+import React, { useContext, useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { UserContext } from 'src/App';
 import { db } from '../config/firebase';
-import '@styles/Pages.css';
+import '@styles/ViewTickets.css';
 
 const ViewTickets: React.FC = () => {
+    const [user] = useContext(UserContext)
     const [tickets, setTickets] = useState<any[]>([]);
 
     useEffect(() => {
@@ -14,9 +15,7 @@ const ViewTickets: React.FC = () => {
                 const snapshot = await getDocs(ticketsCollection);
                 const ticketData = snapshot.docs.map(doc => {
                     const data = doc.data();
-                    // Assuming the user email is stored in the document
-                    const userEmail = data.user_id; // Adjust this according to your database structure
-                    return { id: doc.id, ...data, userEmail };
+                    return { id: doc.id, ...data };
                 });
                 setTickets(ticketData);
             } catch (error) {
@@ -28,6 +27,10 @@ const ViewTickets: React.FC = () => {
     }, []);
 
     const handleDeleteTicket = async (ticketId: string) => {
+        if (!user) {
+            alert('You do not have the permissions to do this');
+            return;
+        }
         try {
             // Delete the ticket document from Firestore
             await deleteDoc(doc(db, 'Tickets', ticketId));
@@ -48,7 +51,7 @@ const ViewTickets: React.FC = () => {
                         <tbody>
                             <tr>
                                 <td> User Email: </td>
-                                <td> {ticket.userEmail} </td>
+                                <td> {ticket.user_id} </td>
                             </tr>
                             <tr>
                                 <td> Date: </td>
@@ -79,16 +82,12 @@ const ViewTickets: React.FC = () => {
                                         <td> End: </td>
                                         <td> {ticket.durationTo} </td>
                                     </tr>
-                                    <tr>
-                                        <td> Reason: </td>
-                                        <td> {ticket.reasons} </td>
-                                    </tr>
                                 </div>
                             )}
                             </tr>
-
-                            <tr>  {(ticket.category === 'Bug' || ticket.category === 'Policy' || ticket.category === 'General' || ticket.category === 'Account') && (
-                                <><td> Description: </td><td> {ticket.description} </td></>)}
+                            <tr>
+                                <td> {ticket.category != 'TimeOff' ? 'Description:' : 'Reason:'} </td>
+                                <td> {ticket.description} </td>
                             </tr>
                             <tr>
                                 <button className="deleteTicketBtn" onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
