@@ -62,4 +62,22 @@
         background-color: rgb(96 98 128);
         border-color: rgb(86, 86, 86);
     }
+
+    .file-ticket-btn {
+        background-color: #03815d;
+        color: white;
+
+        &:hover {
+            background-color: #03694c;
+        }
+    }
+
+    .post-faq-btn {
+        background-color: #03815d;
+        color: white;
+
+        &:hover {
+            background-color: #03694c;
+        }
+    }
 }
