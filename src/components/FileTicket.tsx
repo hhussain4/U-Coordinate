@@ -80,14 +80,14 @@ const FileTicket: React.FC<FileTicketProps> = ({ onClose }) => {
             errorMsg.subject = "Please provide a subject";
         }
         if (!description) {
-            errorMsg.description = `Please provide a ${ticketData.category != 'TimeOff' ? 'description': 'reason'}`;
+            errorMsg.description = `Please provide a ${ticketData.category != 'Time off' ? 'description': 'reason'}`;
         }
         if (!username) {
             errorMsg.user = 'Please sign in to file a ticket';
         }
 
         //checking for valid inputs
-        if ((start >= end) && (ticketData.category === 'TimeOff')) {
+        if ((start >= end) && (ticketData.category === 'Time off')) {
             errorMsg.time = "Please provide a valid time range";
         }
 
@@ -133,13 +133,13 @@ const FileTicket: React.FC<FileTicketProps> = ({ onClose }) => {
                                 <option value="General">General</option>
                                 <option value="Bug">Bug</option>
                                 <option value="Account">Account</option>
-                                <option value="TimeOff">Time Off</option>
+                                <option value="Time off">Time Off</option>
                                 <option value="Policy">Policy</option>
                             </select>
                         </label>
                     </div>
                     {/* Conditionally render input fields based on category */}
-                    {ticketData.category === "TimeOff" &&
+                    {ticketData.category === "Time off" &&
                         <>
                             <label>
                                 Start Date:
@@ -152,7 +152,7 @@ const FileTicket: React.FC<FileTicketProps> = ({ onClose }) => {
                             </label>
                         </>}
                     <label>
-                        {ticketData.category !== "TimeOff" ? 'Description:' : 'Reason:'}
+                        {ticketData.category !== "Time off" ? 'Description:' : 'Reason:'}
                         <input name="description" onChange={handleInputChange} />
                         {errors.description && <div className="err-msg">{errors.description}</div>}
                     </label>

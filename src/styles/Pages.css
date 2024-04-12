@@ -45,7 +45,7 @@
     border-radius: 10px 10px 0 0;
     background-color: #f1ece4;
     padding: 10px;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 
     h3 {
         margin: auto;
@@ -54,6 +54,7 @@
 
 .group-members {
     padding: 10px;
+    overflow-wrap: anywhere;
 }
 
 .group-dropdown {
@@ -88,6 +89,7 @@
     display: block;
     margin-bottom: 2px;
     padding: 5px;
+    width: 100px;
 }
 
 .group-option-btn:hover {

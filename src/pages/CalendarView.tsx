@@ -5,7 +5,7 @@ import { Event } from '@classes/Event';
 import { UserContext } from 'src/App';
 import { User } from '@classes/User';
 import Calendar from '@components/Calendar';
-import CreateEvent from '@components/CreateEvent';
+import EventForm from '@components/EventForm';
 import EventDetails from '@components/EventDetails';
 import '@styles/CalendarView.css';
 
@@ -49,16 +49,17 @@ const CalendarView: React.FC = () => {
         () => unsubscribe();
     }, [user]);
 
+    // functions for opening and closing event form
     const handleOpenModal = () => {
         if (!user) {
             alert('Sign in to use this feature');
             return;
         }
         setIsModalOpen(true);
+        setCreateEvent(defaultEvent);
     }
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setCreateEvent(defaultEvent);
     };
 
     // handles the edit event modal
@@ -148,7 +149,7 @@ const CalendarView: React.FC = () => {
                     <Calendar events={events} onSelectDay={handleSelectDay} />
                 </div>
             </div>
-            {isModalOpen && <CreateEvent onClose={handleCloseModal} addEvent={addEvent} updateEvent={updateEvent} event={createEvent} />}
+            {isModalOpen && <EventForm onClose={handleCloseModal} addEvent={addEvent} updateEvent={updateEvent} event={createEvent} />}
         </>
     );
 };

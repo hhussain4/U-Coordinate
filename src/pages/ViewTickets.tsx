@@ -71,7 +71,7 @@ const ViewTickets: React.FC = () => {
                             </tr>
 
 
-                            <tr>  {ticket.category === 'TimeOff' && (
+                            <tr>  {ticket.category === 'Time off' && (
                                 <div>
                                     <tr>
                                         <td> Start: </td>
@@ -86,7 +86,7 @@ const ViewTickets: React.FC = () => {
                             )}
                             </tr>
                             <tr>
-                                <td> {ticket.category != 'TimeOff' ? 'Description:' : 'Reason:'} </td>
+                                <td> {ticket.category != 'Time off' ? 'Description:' : 'Reason:'} </td>
                                 <td> {ticket.description} </td>
                             </tr>
                             <tr>

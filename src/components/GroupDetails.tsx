@@ -69,12 +69,15 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ groups, onEdit, onDelete, o
                                 <li key={i}>{admin.displayName}</li>
                             ))}
                         </ul>
-                        <p>Members: </p>
-                        <ul>
-                            {group.members.map((member, i) => (
-                                <li key={i}>{member.displayName}</li>
-                            ))}
-                        </ul>
+                        {group.members.length > 0 &&
+                        <>
+                            <p>Members: </p>
+                            <ul>
+                                {group.members.map((member, i) => (
+                                    <li key={i}>{member.displayName}</li>
+                                ))}
+                            </ul>
+                        </>}
                     </div>
                 </div>
             ))}

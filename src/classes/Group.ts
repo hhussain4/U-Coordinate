@@ -31,6 +31,21 @@ export class Group {
         if (this.members.includes(member)) this.members.splice(this.members.indexOf(member), 1);
     }
 
+    equals(group: Group) {
+        const adminUsernames = new Set(group.admins.map(admin => admin.username));
+        const memberUsernames = new Set(group.members.map(member => member.username));
+        return (
+            this.name === group.name &&
+            this.id === group.id &&
+            this.admins.length === group.admins.length &&
+            this.members.length === group.members.length &&
+            this.admins.every(admin => adminUsernames.has(admin.username)) &&
+            this.members.every(member => memberUsernames.has(member.username))
+        )
+    }
+
+    /* Below are function for notifying users*/
+
     // for notifying users of a created group
     getCreationNotification(user: User): Notification {
         const title = `New group created: ${this.name}`;
@@ -77,5 +92,31 @@ export class Group {
         const sender = `${user.displayName}: ${user.username}`;
         const info = `${user.displayName} has left the group: ${this.name}`;
         return new Notification(title, sender, info, 3);
+    }
+
+    // notifies users of changes accordingly
+    notifyChanges(prevGroup: Group, user: User) {
+        const prevAdminUsernames = new Set(prevGroup.admins.map(admin => admin.username));
+        const newAdminUsernames = new Set(this.admins.map(admin => admin.username));
+        const prevMemberUsernames = new Set(prevGroup.members.map(member => member.username));
+        const newMemberUsernames = new Set(this.members.map(member => member.username));
+
+        const removedAdmins = prevGroup.admins.filter(admin => !newAdminUsernames.has(admin.username));
+        const addedAdmins = this.admins.filter(admin => !prevAdminUsernames.has(admin.username));
+        const removedMembers = prevGroup.members.filter(member => !newMemberUsernames.has(member.username));
+        const addedMembers = this.members.filter(member => !prevMemberUsernames.has(member.username));
+
+        // if names do not match
+        if (prevGroup.name !== this.name) {
+            const notification = this.getNameChangeNotification(user, prevGroup.name);
+            [...newAdminUsernames, ...newMemberUsernames].forEach(e => notification.notify(e));
+        }
+
+        // notify added users
+        const addnotification = this.getAddNotification(user);
+        [...addedAdmins, ...addedMembers].forEach(e => addnotification.notify(e.username))
+        // notify removed users
+        const removeNotification = this.getRemoveNotification(user);
+        [...removedAdmins, ...removedMembers].forEach(e => removeNotification.notify(e.username));
     }
 }

@@ -6,9 +6,11 @@ import { db } from "src/config/firebase";
 import Multiselect from "multiselect-react-dropdown";
 import '@styles/CreateForm.css';
 
-interface CreateGroupProps {
-    onClose: () => void;
+interface GroupFormProps {
+    group: Group;
     addGroup: (group: Group) => void;
+    updateGroup: (group: Group) => void;
+    onClose: () => void;
 }
 
 interface ErrorData {
@@ -17,11 +19,11 @@ interface ErrorData {
     members: string;
 }
 
-const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
+const GroupForm: React.FC<GroupFormProps> = ({ group, addGroup, updateGroup, onClose }) => {
     const [errors, setErrors] = useState<ErrorData>({ name: "", admins: "", members: "" });
     const [usernames, setUsernames] = useState<string[]>([]);
-    const [admins, setAdmins] = useState<User[]>([]);
-    const [members, setMembers] = useState<User[]>([]);
+    const [admins, setAdmins] = useState<User[]>(group.admins);
+    const [members, setMembers] = useState<User[]>(group.members);
 
     // multiselect functions
     const addAdmin = (prevList: string[], user: string) => {
@@ -66,13 +68,10 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
         if (admins.length === 0) {
             errorMsg.admins = "Please provide at least one admin";
         }
-        if (members.length === 0) {
-            errorMsg.members = "Please provide at least one member";
-        }
 
         // check for duplicate members
+        const memberList = members.map(member => member.username);
         admins.forEach(admin => {
-            const memberList = members.map(member => member.username);
             if (memberList.includes(admin.username)) {
                 errorMsg.members = "Cannot have a user as both an admin and member";
             }
@@ -82,7 +81,13 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
 
         //only submit if there are no errors
         if (Object.values(errorMsg).every((error) => !error)) {
-            addGroup(new Group(name, admins, members));
+            // only update group if it has group id and is different from the previous group
+            const newGroup = new Group(name, admins, members, group.id);
+            if (group.id) {
+                if(!group.equals(newGroup)) updateGroup(newGroup);
+            } else {
+                addGroup(newGroup);
+            }
             onClose();
         }
     }
@@ -95,7 +100,7 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
                 <form onSubmit={handleSubmit}>
                     <label>
                         Group Name:
-                        <input type="text" name="name" />
+                        <input type="text" name="name" defaultValue={group.name} />
                         {errors.name && <div className="err-msg">{errors.name}</div>}
                     </label>
                     <label>
@@ -103,6 +108,7 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
                         <Multiselect
                             isObject={false}
                             options={usernames}
+                            selectedValues={group.admins.map(admin => admin.username)}
                             onSelect={addAdmin}
                             onRemove={removeAdmin}
                             hidePlaceholder={true}
@@ -114,6 +120,7 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
                         <Multiselect
                             isObject={false}
                             options={usernames}
+                            selectedValues={group.members.map(member => member.username)}
                             onSelect={addMember}
                             onRemove={removeMember}
                             hidePlaceholder={true}
@@ -127,4 +134,4 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onClose, addGroup }) => {
     )
 };
 
-export default CreateGroup;
+export default GroupForm;

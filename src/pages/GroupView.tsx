@@ -2,30 +2,37 @@ import { useContext, useState } from 'react';
 import { GroupContext, UserContext } from 'src/App';
 import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/config/firebase';
+import { User } from '@classes/User';
 import { Group } from '@classes/Group';
 import GroupDetails from '@components/GroupDetails';
-import CreateGroup from '@components/CreateGroup';
-import EditGroup from '@components/EditGroup';
+import GroupForm from '@components/GroupForm';
 import CreateAnnouncement from '@components/CreateAnnouncement';
 import '@styles/Pages.css';
 
 const GroupView: React.FC = () => {
     const [user] = useContext(UserContext);
     const [groups] = useContext(GroupContext);
-    const [manageGroup, setManageGroup] = useState<Group>(new Group());
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const defaultGroup = new Group();
+    defaultGroup.addAdmin(new User(user?.username));
+
+    const [manageGroup, setManageGroup] = useState<Group>(defaultGroup);
+    const [groupFormOpen, setGroupFormOpen] = useState(false);
     const [isAnnounceModalOpen, setIsAnnounceModalOpen] = useState(false);
 
+    // functions for opening and closing group form
     const openModal = () => {
         if (!user) {
             alert('Sign in to use this feature');
             return;
         }
-        setIsCreateModalOpen(true);
+        setGroupFormOpen(true);
+        setManageGroup(defaultGroup)
     }
-    const closeModal = () => setIsCreateModalOpen(false);
+    const closeModal = () => {
+        setGroupFormOpen(false);
+    }
     
+    // function to add group to database
     const addGroup = async (newGroup: Group) => {
         try {
             const admins = newGroup.admins.map(admin => admin.username);
@@ -44,10 +51,26 @@ const GroupView: React.FC = () => {
         }
     };
 
+    // function to update group in database
+    const updateGroup = async (group: Group) => {
+        try {
+            const prevGroup = groups.find(e => e.id == group.id);
+            await updateDoc(doc(db, 'Group', group.id), {
+                name: group.name,
+                admins: group.admins.map(admin => admin.username),
+                members: group.members.map(member => member.username)
+            });
+            group.notifyChanges(prevGroup!, user!);
+        } catch (error) {
+            console.log('Error updating group', error);
+            alert('An error occured while updating the group');
+        }
+    }
+
     // group options
     const editGroup = (group: Group) => {
         setManageGroup(group);
-        setIsEditModalOpen(true);
+        setGroupFormOpen(true);
     }
 
     const deleteGroup = async (group: Group) => {
@@ -91,8 +114,7 @@ const GroupView: React.FC = () => {
             <div className='empty'>
                 {groups.length == 0 && <p>No groups to display</p>}
             </div>
-            {isCreateModalOpen && <CreateGroup onClose={closeModal} addGroup={addGroup} />}
-            {isEditModalOpen && <EditGroup onClose={() => setIsEditModalOpen(false)} group={manageGroup} />}
+            {groupFormOpen && <GroupForm group={manageGroup} addGroup={addGroup} updateGroup={updateGroup} onClose={closeModal} />}
             {isAnnounceModalOpen && <CreateAnnouncement onClose={() => setIsAnnounceModalOpen(false)} group={manageGroup} />}
         </>
     );

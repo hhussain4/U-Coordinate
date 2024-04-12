@@ -6,7 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import Multiselect from 'multiselect-react-dropdown';
 import '@styles/CreateForm.css';
 
-interface CreateEventProps {
+interface EventFormProps {
   event: Event;
   addEvent: (newEvent: Event) => void;
   updateEvent: (newEvent: Event) => void;
@@ -21,7 +21,7 @@ interface ErrorData {
   users: string;
 }
 
-const CreateEvent: React.FC<CreateEventProps> = ({ event, addEvent, updateEvent, onClose }) => {
+const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onClose }) => {
   const [errors, setErrors] = useState<ErrorData>({ name: "", description: "", time: "", location: "", users: "" });
   const [usernames, setUsernames] = useState<string[]>([]);
   const [users, setUsers] = useState<User[]>(event.members);
@@ -145,4 +145,4 @@ const CreateEvent: React.FC<CreateEventProps> = ({ event, addEvent, updateEvent,
   );
 };
 
-export default CreateEvent;
+export default EventForm;
