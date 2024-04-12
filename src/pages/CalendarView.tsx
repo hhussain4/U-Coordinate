@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { db } from 'src/config/firebase';
 import { Event } from '@classes/Event';
 import { UserContext } from 'src/App';
@@ -11,8 +11,13 @@ import '@styles/CalendarView.css';
 
 const CalendarView: React.FC = () => {
     const [user] = useContext(UserContext);
+    const defaultEvent = new Event();
+    defaultEvent.addMember(new User(user?.username));
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [events, setEvents] = useState<Event[]>([]);
+    // this controls what is filled out on the form when creating/editing an event
+    const [createEvent, setCreateEvent] = useState<Event>(defaultEvent);
     const [selectedDayEvents, setSelectedDayEvents] = useState<Event[]>([]);
 
     // retrieves events only if the user is logged in
@@ -33,8 +38,8 @@ const CalendarView: React.FC = () => {
             const resolvedEvents = await Promise.all(events);
             const sortedEvents = resolvedEvents.sort((event1, event2) => new Date(event1.start).valueOf() - new Date(event2.start).valueOf());
             setEvents(sortedEvents);
-            
-             // diplays todays events on initial load of the calendar page
+
+            // diplays todays events on initial load of the calendar page
             if (initialLoad) {
                 setSelectedDayEvents(getEventsOnDate(sortedEvents, new Date()));
                 initialLoad = false;
@@ -51,7 +56,16 @@ const CalendarView: React.FC = () => {
         }
         setIsModalOpen(true);
     }
-    const handleCloseModal = () => setIsModalOpen(false);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setCreateEvent(defaultEvent);
+    };
+
+    // handles the edit event modal
+    const handleEditEvent = (event: Event) => {
+        setCreateEvent(event);
+        setIsModalOpen(true);
+    };
 
     const handleSelectDay = (events: Event[]) => {
         setSelectedDayEvents(events);
@@ -72,7 +86,7 @@ const CalendarView: React.FC = () => {
                 recur_times: newEvent.recurTimes
             });
             // notify all members of the event's creation
-            const notification = newEvent.getCreationNotification(user!, 3);//make NOTIFICARIon
+            const notification = newEvent.getCreationNotification(user!, 3);
             members.forEach(username => notification.notify(username));
         } catch (error) {
             console.log(error);
@@ -80,12 +94,37 @@ const CalendarView: React.FC = () => {
         }
     };
 
-    //below are methods to handle editing and deleting events
-    const handleEditEvent = (eventToEdit: Event) => {
-        // Implement code for edit functionality here
+    // below are methods to update and delete events
+    const updateEvent = async (event: Event) =>  {
+        try {
+            const members = event.members.map(member => member.username);
+            await updateDoc(doc(db, 'Event', event.id), {
+                name: event.name,
+                description: event.description,
+                start: event.start.getTime(),
+                end: event.end.getTime(),
+                location: event.location,
+                members: members,
+                recurrence: event.recurrence,
+                recur_times: event.recurTimes
+            });
+            // remove the event from the selected days events
+            const replacedEvent = selectedDayEvents.find(e => e.id === event.id);
+            setSelectedDayEvents((prevSelectedDayEvents) => prevSelectedDayEvents.filter(e => e.id !== event.id));
+            // add it back if it still starts on the same day
+            if (new Date(replacedEvent!.start).toDateString() === new Date(event.start).toDateString()) {
+                setSelectedDayEvents(prev => [...prev, ...[event]]);
+            }
+            // notify all members of updated event
+            const notification = event.getUpdateNotification(user!, 3);
+            members.forEach(username => notification.notify(username));
+        } catch (error) {
+            console.log(error);
+            alert("Error occured while updating event");
+        }
     };
 
-    const handleDeleteEvent = async (eventToDelete: Event) => {
+    const deleteEvent = async (eventToDelete: Event) => {
         try {
             await deleteDoc(doc(db, 'Event', eventToDelete.id));
             // notify users of event deletion
@@ -103,13 +142,13 @@ const CalendarView: React.FC = () => {
             <div className="content-wrapper">
                 <div className="event-container">
                     <button className="create-event-btn" onClick={handleOpenModal}>Create Event</button>
-                    <EventDetails events={selectedDayEvents} onEdit={handleEditEvent} onDelete={handleDeleteEvent} />
+                    <EventDetails events={selectedDayEvents} onEdit={handleEditEvent} onDelete={deleteEvent} />
                 </div>
                 <div className="calendar-container">
                     <Calendar events={events} onSelectDay={handleSelectDay} />
                 </div>
             </div>
-            {isModalOpen && <CreateEvent onClose={handleCloseModal} addEvent={addEvent} />}
+            {isModalOpen && <CreateEvent onClose={handleCloseModal} addEvent={addEvent} updateEvent={updateEvent} event={createEvent} />}
         </>
     );
 };

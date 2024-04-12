@@ -7,8 +7,10 @@ import Multiselect from 'multiselect-react-dropdown';
 import '@styles/CreateForm.css';
 
 interface CreateEventProps {
-  onClose: () => void;
+  event: Event;
   addEvent: (newEvent: Event) => void;
+  updateEvent: (newEvent: Event) => void;
+  onClose: () => void;
 }
 
 interface ErrorData {
@@ -19,16 +21,18 @@ interface ErrorData {
   users: string;
 }
 
-const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
+const CreateEvent: React.FC<CreateEventProps> = ({ event, addEvent, updateEvent, onClose }) => {
   const [errors, setErrors] = useState<ErrorData>({ name: "", description: "", time: "", location: "", users: "" });
   const [usernames, setUsernames] = useState<string[]>([]);
-  const [users, setUser] = useState<User[]>([]);
-
+  const [users, setUsers] = useState<User[]>(event.members);
+  const [start, setStart] = useState<Date>(event.start)
+  const [end, setEnd] = useState<Date>(event.end);
+  
   const addUser = (prevList: string[], user: string) => {
-    setUser((prevUsers) => [...prevUsers, new User(user, user)]);
+    setUsers((prevUsers) => [...prevUsers, new User(user)]);
   }
   const removeUser = (prevList: string[], user: string) => {
-    setUser((prevUsers) => prevUsers.filter(m => m.username != user));
+    setUsers((prevUsers) => prevUsers.filter(m => m.username != user));
   }
 
   // gets the usernames from the database
@@ -53,8 +57,6 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
     const form = e.currentTarget;
     const name = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
     const description = (form.elements.namedItem('description') as HTMLTextAreaElement).value.trim();
-    const start = (form.elements.namedItem('start') as HTMLInputElement).value.trim();
-    const end = (form.elements.namedItem('end') as HTMLInputElement).value.trim();
     const location = (form.elements.namedItem('location') as HTMLInputElement).value.trim();
 
     //checking for empty fields
@@ -75,8 +77,6 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
     }
 
     //checking for valid inputs
-    const startDate = new Date(start);
-    const endDate = new Date(end);
     if (start >= end) {
       errorMsg.time = "Please provide a valid time range";
     }
@@ -85,8 +85,13 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
 
     //only submits if there are no errors
     if (Object.values(errorMsg).every((error) => !error)) {
-      const newEvent = new Event(name, description, startDate, endDate, location, users);
-      addEvent(newEvent);
+      const newEvent = new Event(name, description, start, end, location, users, event.id);
+      // only update event if it has an id and it is different from the previous event
+      if (event.id) {
+        if (!newEvent.equals(event)) updateEvent(newEvent);
+      } else {
+        addEvent(newEvent)
+      }
       onClose();
     }
   };
@@ -95,30 +100,30 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
     <div className="modal-overlay">
       <div className="modal">
         <button className="modal-close-btn" onClick={onClose}>X</button>
-        <h2>Create Event</h2>
+        <h2>{event.id ? 'Edit' : 'Create'} Event</h2>
         <form onSubmit={handleSubmit}>
           <label>
             Event Name:
-            <input type="text" name="name" />
+            <input type="text" name="name" defaultValue={event.name} />
             {errors.name && <div className="err-msg">{errors.name}</div>}
           </label>
           <label>
             Event Description:
-            <textarea name="description" />
+            <textarea name="description" defaultValue={event.description} />
             {errors.description && <div className="err-msg">{errors.description}</div>}
           </label>
           <label>
             Event Start:
-            <input type="datetime-local" name="start" />
+            <input type="datetime-local" name="start" defaultValue={event.id? event.start.toISOString().slice(0, 16) : ''} onChange={(e) => setStart(new Date(e.target.value))} />
           </label>
           <label>
             Event End:
-            <input type="datetime-local" name="end" />
+            <input type="datetime-local" name="end" defaultValue={event.id ? end.toISOString().slice(0, 16) : ''} onChange={(e) => setEnd(new Date(e.target.value))} />
             {errors.time && <div className="err-msg">{errors.time}</div>}
           </label>
           <label>
             Event Location:
-            <input type="text" name="location" />
+            <input type="text" name="location" defaultValue={event.location} />
             {errors.location && <div className="err-msg">{errors.location}</div>}
           </label>
           <label>
@@ -126,6 +131,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ onClose, addEvent }) => {
             <Multiselect
               isObject={false}
               options={usernames}
+              selectedValues={event.members.map(member => member.username)}
               onSelect={addUser}
               onRemove={removeUser}
               hidePlaceholder={true}
