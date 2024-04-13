@@ -46,6 +46,10 @@
     z-index: 1000;
 }
 
+.faq-list {
+    margin-bottom: 60px;
+}
+
 .faq-item {
     border: 1px solid #ccc;
     border-radius: 8px;

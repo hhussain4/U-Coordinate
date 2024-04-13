@@ -2,7 +2,6 @@ import { Component } from 'react';
 import CalendarDays, { CalendarDay } from './Calendar-days';
 import { Event } from '@classes/Event';
 import '@styles/Calendar.css';
-import '@pages/CalendarView';
 
 interface CalendarState {
     currentDay: Date;

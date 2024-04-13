@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Event } from '@classes/Event';
 import { User } from '@classes/User';
+import { Group, getGroups } from '@classes/Group';
 import { db } from 'src/config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import Multiselect from 'multiselect-react-dropdown';
@@ -24,10 +25,20 @@ interface ErrorData {
 const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onClose }) => {
   const [errors, setErrors] = useState<ErrorData>({ name: "", description: "", time: "", location: "", users: "" });
   const [usernames, setUsernames] = useState<string[]>([]);
+  const [groupTags, setGroupTags] = useState<String[]>([]);
   const [users, setUsers] = useState<User[]>(event.members);
-  const [start, setStart] = useState<Date>(event.start)
+  const [groups, setGroups] = useState<Group[]>(event.groups);
+  const [start, setStart] = useState<Date>(event.start);
   const [end, setEnd] = useState<Date>(event.end);
-  
+
+  // multiselect adding and removing groups
+  const addGroup = (prevList: string[], group: string) => {
+    setGroups((prevGroups) => [...prevGroups, new Group(group)]);
+  }
+  const removeGroup = (prevList: string[], group: string) => {
+    setGroups((prevGroups) => prevGroups.filter(g => g.tag != group));
+  }
+  // multiselect adding and removing users
   const addUser = (prevList: string[], user: string) => {
     setUsers((prevUsers) => [...prevUsers, new User(user)]);
   }
@@ -46,11 +57,21 @@ const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onC
         console.error('Error fetching usernames:', error);
       }
     };
+    const fetchGroupTags = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'Group'));
+        const tags = querySnapshot.docs.map(doc => doc.id);
+        setGroupTags(tags);
+      } catch (error) {
+        console.error('Error fetching group tags:', error);
+      }
+    }
 
     fetchUsernames();
+    fetchGroupTags();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errorMsg: ErrorData = { name: "", description: "", time: "", location: "", users: "" };
 
@@ -72,7 +93,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onC
     if (!location) {
       errorMsg.location = "Please provide a location";
     }
-    if (users.length === 0) {
+    if (groups.length === 0 && users.length === 0) {
       errorMsg.users = "Please provide at least one username";
     }
 
@@ -85,7 +106,10 @@ const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onC
 
     //only submits if there are no errors
     if (Object.values(errorMsg).every((error) => !error)) {
-      const newEvent = new Event(name, description, start, end, location, users, event.id);
+      // retrieve the members and admins of the groups selected so that they can be notified
+      const groupsList = await getGroups(groups.map(group => group.tag));
+      const newEvent = new Event(name, description, start, end, location, groupsList, users, event.id);
+
       // only update event if it has an id and it is different from the previous event
       if (event.id) {
         if (!newEvent.equals(event)) updateEvent(newEvent);
@@ -114,7 +138,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onC
           </label>
           <label>
             Event Start:
-            <input type="datetime-local" name="start" defaultValue={event.id? event.start.toISOString().slice(0, 16) : ''} onChange={(e) => setStart(new Date(e.target.value))} />
+            <input type="datetime-local" name="start" defaultValue={event.id ? event.start.toISOString().slice(0, 16) : ''} onChange={(e) => setStart(new Date(e.target.value))} />
           </label>
           <label>
             Event End:
@@ -125,6 +149,17 @@ const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onC
             Event Location:
             <input type="text" name="location" defaultValue={event.location} />
             {errors.location && <div className="err-msg">{errors.location}</div>}
+          </label>
+          <label>
+            Groups Involved:
+            <Multiselect
+              isObject={false}
+              options={groupTags}
+              selectedValues={event.groups.map(group => group.tag)}
+              onSelect={addGroup}
+              onRemove={removeGroup}
+              hidePlaceholder={true}
+            />
           </label>
           <label>
             Users Involved:

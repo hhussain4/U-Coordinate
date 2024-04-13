@@ -39,16 +39,26 @@
     width: 250px;
 }
 
-.group-name {
+.group-header {
     display: flex;
     border-bottom: 2px solid black;
     border-radius: 10px 10px 0 0;
     background-color: #f1ece4;
     padding: 10px;
     overflow-wrap: anywhere;
+}
+
+.group-title {
+    margin: auto;
+    text-align: center;
 
     h3 {
-        margin: auto;
+        margin: 0;
+    }
+
+    p {
+        margin: 0;
+        color: #6c4400;
     }
 }
 
@@ -112,9 +122,12 @@
         background-color: #717a93;
     }
 
-    .group-name {
+    .group-header {
         background-color: #5e75af;
-
+        
+        p {
+            color: #d2d2d2
+        }
     }
 
     .group-members {

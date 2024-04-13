@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { GroupContext, UserContext } from 'src/App';
-import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from 'src/config/firebase';
 import { User } from '@classes/User';
 import { Group } from '@classes/Group';
@@ -37,7 +37,7 @@ const GroupView: React.FC = () => {
         try {
             const admins = newGroup.admins.map(admin => admin.username);
             const members = newGroup.members.map(member => member.username);
-            await addDoc(collection(db, 'Group'), {
+            await setDoc(doc(db, 'Group', newGroup.tag), {
                 name: newGroup.name,
                 admins: admins,
                 members: members
@@ -54,8 +54,8 @@ const GroupView: React.FC = () => {
     // function to update group in database
     const updateGroup = async (group: Group) => {
         try {
-            const prevGroup = groups.find(e => e.id == group.id);
-            await updateDoc(doc(db, 'Group', group.id), {
+            const prevGroup = groups.find(e => e.tag == group.tag);
+            await updateDoc(doc(db, 'Group', group.tag), {
                 name: group.name,
                 admins: group.admins.map(admin => admin.username),
                 members: group.members.map(member => member.username)
@@ -77,7 +77,7 @@ const GroupView: React.FC = () => {
         try {
             const admins = group.admins.map(admin => admin.username);
             const members = group.members.map(member => member.username);
-            await deleteDoc(doc(db, 'Group', group.id));
+            await deleteDoc(doc(db, 'Group', group.tag));
             // notify users of event deletion
             const notification = group.getDeleteNotification(user!);
             [...admins, ...members].forEach(username => notification.notify(username));
@@ -95,7 +95,7 @@ const GroupView: React.FC = () => {
     const leaveGroup = async (group: Group) => {
         try {
             const members = group.members.map(member => member.username).filter(member => member != user?.username);
-            await updateDoc(doc(db, 'Group', group.id), {members: members});
+            await updateDoc(doc(db, 'Group', group.tag), {members: members});
             const notification = group.getLeaveNotification(user!);
             group.admins.forEach(admin => notification.notify(admin.username));
         } catch (error) {

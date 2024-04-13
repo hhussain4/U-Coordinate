@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { auth, db } from './config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, getDoc, onSnapshot, or, query, setDoc, where } from 'firebase/firestore';
-import { User } from '@classes/User';
+import { User, getUsers } from '@classes/User';
 import { Group } from '@classes/Group';
-import Calendar, { getUsers } from '@pages/CalendarView';
+import Calendar from '@pages/CalendarView';
 import moment from 'moment';
 import NotFound from '@pages/NotFound';
 import NavBar from '@components/NavBar';
@@ -52,7 +52,7 @@ function App() {
       const groups = querySnapshot.docs.map(async (doc) => {
         const data = doc.data();
         const [admins, members] = await Promise.all([getUsers(data.admins), getUsers(data.members)]);
-        return new Group(data.name, admins, members, doc.id);
+        return new Group(doc.id, data.name, admins, members);
       });
       const resolvedGroups = await Promise.all(groups);
       setGroups(resolvedGroups);

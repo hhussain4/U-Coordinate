@@ -44,8 +44,11 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ groups, onEdit, onDelete, o
         <div className="group-list">
             {groups.map((group, index) => (
                 <div key={index} className="group">
-                    <div className="group-name">
-                        <h3>{group.name}</h3>
+                    <div className="group-header">
+                        <div className="group-title">
+                            <h3>{group.name}</h3>
+                            <p>{group.tag}</p>
+                        </div>
                         <div className='group-dropdown' ref={e => groupMenus.current[index] = e}>
                             <button className="group-button" onClick={() => handleDropdown(index)}>
                                 <i className="fa-solid fa-ellipsis"></i>
@@ -70,14 +73,14 @@ const GroupDetails: React.FC<GroupDetailsProps> = ({ groups, onEdit, onDelete, o
                             ))}
                         </ul>
                         {group.members.length > 0 &&
-                        <>
-                            <p>Members: </p>
-                            <ul>
-                                {group.members.map((member, i) => (
-                                    <li key={i}>{member.displayName}</li>
-                                ))}
-                            </ul>
-                        </>}
+                            <>
+                                <p>Members: </p>
+                                <ul>
+                                    {group.members.map((member, i) => (
+                                        <li key={i}>{member.displayName}</li>
+                                    ))}
+                                </ul>
+                            </>}
                     </div>
                 </div>
             ))}

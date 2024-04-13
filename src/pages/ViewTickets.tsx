@@ -70,30 +70,26 @@ const ViewTickets: React.FC = () => {
                                 <td> {ticket.category} </td>
                             </tr>
 
-
-                            <tr>  {ticket.category === 'Time off' && (
-                                <div>
+                            {ticket.category === 'Time off' && (
+                                <>
                                     <tr>
                                         <td> Start: </td>
                                         <td> {ticket.durationFrom} </td>
                                     </tr>
-
                                     <tr>
                                         <td> End: </td>
                                         <td> {ticket.durationTo} </td>
                                     </tr>
-                                </div>
+                                </>
                             )}
-                            </tr>
+
                             <tr>
                                 <td> {ticket.category != 'Time off' ? 'Description:' : 'Reason:'} </td>
                                 <td> {ticket.description} </td>
                             </tr>
-                            <tr>
-                                <button className="deleteTicketBtn" onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
-                            </tr>
                         </tbody>
                     </table>
+                    <button className="deleteTicketBtn" onClick={() => handleDeleteTicket(ticket.id)}>Delete</button>
                 </div>
             ))}
         </div>

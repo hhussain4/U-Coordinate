@@ -72,14 +72,22 @@ const EventDetails: React.FC<EventDetailsProps> = ({ events, onEdit, onDelete })
                 <td>Location:</td>
                 <td>{event.location}</td>
               </tr>
-              <tr>
+              {event.groups.length !==0 && <tr>
+                <td>Groups:</td>
+                <td>
+                  {event.groups.map((group, index) =>
+                    <p key={index}>{group.name}</p>
+                  )}
+                </td>
+              </tr>}
+              {event.members.length !==0 && <tr>
                 <td>Members:</td>
                 <td>
                   {event.members.map((member, index) =>
                     <p key={index}>{member.displayName}</p>
                   )}
                 </td>
-              </tr>
+              </tr>}
             </tbody>
           </table>
         </div>

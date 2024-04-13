@@ -1,17 +1,19 @@
+import { doc, getDoc } from "firebase/firestore";
 import { Notification } from "./Notification";
 import { User } from "./User";
+import { db } from "src/config/firebase";
 
 export class Group {
+    tag: string;
     name: string;
     members: User[];
     admins: User[];
-    id: string;
 
-    constructor(name: string = '', admins?: User[], members?: User[], id: string = '') {
+    constructor( tag: string = '', name: string = '', admins?: User[], members?: User[]) {
+        this.tag = tag;
         this.name = name;
         this.admins = admins || [];
         this.members = members || [];
-        this.id = id;
     }
 
     addAdmin(admin: User) {
@@ -36,7 +38,7 @@ export class Group {
         const memberUsernames = new Set(group.members.map(member => member.username));
         return (
             this.name === group.name &&
-            this.id === group.id &&
+            this.tag === group.tag &&
             this.admins.length === group.admins.length &&
             this.members.length === group.members.length &&
             this.admins.every(admin => adminUsernames.has(admin.username)) &&
@@ -119,4 +121,24 @@ export class Group {
         const removeNotification = this.getRemoveNotification(user);
         [...removedAdmins, ...removedMembers].forEach(e => removeNotification.notify(e.username));
     }
+}
+
+// returns list of groups with their names, admin usernames, and member usernames using their group ids
+export async function getGroups(ids: string[]): Promise<Group[]> {
+    if (!ids) return [];
+
+    const groups = await Promise.all(ids.map(async (id: string) => {
+        const group = await getDoc(doc(db, 'Group', id));
+
+        // if group does not exist, then return a default group
+        if (!group.exists()) {
+            return new Group();
+        }
+        const data = group.data();
+        const admins = (data.admins as string[]).map(admin => new User(admin));
+        const members = (data.members as string[]).map(member => new User(member));
+        return new Group(id, data.name, admins, members);
+    }));
+    // only return the groups that exists
+    return groups.filter(group => group.tag !== '');
 }
