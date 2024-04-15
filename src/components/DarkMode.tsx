@@ -1,26 +1,26 @@
 import { useContext, useState } from 'react';
 import { UserContext } from 'src/App';
 import { User } from '@classes/User';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from 'src/config/firebase';
 import '@styles/NavBar.css';
 
 const DarkModeToggle: React.FC = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark');
   const [user, setUser] = useContext(UserContext);
 
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
-    // this is for when we move the darkmode toggle to settings
+
+    const theme = localStorage.getItem('theme') === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
     if (user) {
-      const newUser = new User(
-        user?.username,
-        user?.displayName,
-        user?.timezone,
-        darkMode ? 'light' : 'dark',
-        user?.privilege
-      );
-      setUser(newUser)
+      updateDoc(doc(db, 'User', user.username), {theme: theme});
+      setUser(new User(user.username, user.displayName, user.timezone, theme, user.privilege));
+    } else {
+      // Toggle dark mode class on any element in css by calling '.dark-mode' in front of it
+      document.body.classList.toggle('dark-mode');
     }
-    document.body.classList.toggle('dark-mode'); // Toggle dark mode class on any element in css by calling '.dark-mode' in front of it
   };
 
   return (

@@ -118,13 +118,10 @@
 }
 
 /* Dark mode styles */
-
-body.dark-mode {
+.dark-mode {
     background-color: #35374B;
     color: #ffffff;
-}
 
-.dark-mode {
     .navbar {
         background-color: #232D3F;
         color: #fff;

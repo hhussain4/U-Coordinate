@@ -32,6 +32,8 @@ function App() {
         const name = userCredential.displayName || 'User';
         const userData = await getUserData(email, name);
         setUser(userData);
+        // store theme in local data for faster access
+        localStorage.setItem('theme', userData.theme);
       } else {
         console.log('User is not logged in');
       }
@@ -59,6 +61,17 @@ function App() {
     });
 
     () => unsubscribe();
+  }, [user]);
+
+  // sets the theme for the entire app
+  useEffect(() => {
+    // access theme from local data
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+
   }, [user]);
 
   return (
