@@ -7,9 +7,10 @@ import Inbox from '@components/Inbox';
 import '@styles/NavBar.css'
 
 const NavBar: React.FC = () => {
-    const [open, setOpen] = useState(false);
-    const handleDropdown = () => setOpen(!open);
     const [user] = useContext(UserContext);
+    const [open, setOpen] = useState(false);
+    const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark');
+    const handleDropdown = () => setOpen(!open);
 
     // makes user menu collapse when clicking outside the menu
     const userMenu = useRef<HTMLDivElement>(null);
@@ -37,6 +38,10 @@ const NavBar: React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        setDarkMode(localStorage.getItem('theme') === 'dark');
+    }, [user]);
+
     return (
         <div className="navbar">
             <div className="dropdown">
@@ -50,7 +55,7 @@ const NavBar: React.FC = () => {
                     <a href="./tickets">Tickets</a>
                 </div>
             </div>
-            {user?.theme === "dark" ? <img src='../../darkLogo.png'></img> : <img src='../../logo.png'></img>}
+            {darkMode ? <img src='../../darkLogo.png'></img> : <img src='../../logo.png'></img>}
             <div className='dark-mode-toggle'>
                 <DarkModeToggle />
             </div>

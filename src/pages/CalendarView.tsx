@@ -55,7 +55,7 @@ const CalendarView: React.FC = () => {
         });
 
         () => unsubscribe();
-    }, [user]);
+    }, [user, groups]);
 
     // functions for opening and closing event form
     const handleOpenModal = () => {
