@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { UserContext } from 'src/App';
-import DarkModeToggle from '@components/DarkMode';
 import Inbox from '@components/Inbox';
 import '@styles/NavBar.css'
 
@@ -55,9 +54,8 @@ const NavBar: React.FC = () => {
                     <a href="./tickets">Tickets</a>
                 </div>
             </div>
-            {darkMode ? <img src='../../darkLogo.png'></img> : <img src='../../logo.png'></img>}
-            <div className='dark-mode-toggle'>
-                <DarkModeToggle />
+            <div className='logo'>
+                {darkMode ? <img src='../../darkLogo.png'></img> : <img src='../../logo.png'></img>}
             </div>
             {user && <Inbox />}
             <div className='dropdown' ref={userMenu}>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { auth, db } from '../config/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { AuthError, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment-timezone';
@@ -51,7 +51,8 @@ const Register: React.FC = () => {
     if (Object.values(errorMsg).every((error) => !error)) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
-        setDoc(doc(db, 'User', email), {
+        addDoc(collection(db, 'User'), {
+          email: email,
           display_name: name,
           theme: 'light',
           timezone: timezone
@@ -131,12 +132,12 @@ const Register: React.FC = () => {
 
 export default Register;
 
-function validateEmail(email: string) {
+export function validateEmail(email: string) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
-function validateName(name: string) {
-  const nameRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9_\-]*/;
+export function validateName(name: string) {
+  const nameRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9_\- ]*$/;
   return nameRegex.test(name);
 }
