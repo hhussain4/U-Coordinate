@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { GroupContext, UserContext } from 'src/App';
-import { deleteDoc, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { db } from 'src/config/firebase';
 import { User } from '@classes/User';
 import { Group } from '@classes/Group';
@@ -78,9 +78,21 @@ const GroupView: React.FC = () => {
             const admins = group.admins.map(admin => admin.username);
             const members = group.members.map(member => member.username);
             await deleteDoc(doc(db, 'Group', group.tag));
-            // notify users of event deletion
+            
+            // notify users of group deletion
             const notification = group.getDeleteNotification(user!);
             [...admins, ...members].forEach(username => notification.notify(username));
+            
+            // delete events where the group is the only one involved
+            const events = await getDocs(query(collection(db, 'Event'), where('groups', 'array-contains', group.tag)));
+            events.forEach(event => {
+                const eventData = event.data();
+                const eventMembers = eventData.members || [];
+                const eventGroups = eventData.groups;
+                if (eventMembers.length === 0 && eventGroups.length === 1) {
+                    deleteDoc(event.ref);
+                }
+            });
         } catch (error) {
             console.log(error);
             alert("Error occured while deleting group");

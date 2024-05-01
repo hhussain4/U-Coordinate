@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { auth, db } from './config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { collection, doc, getDoc, onSnapshot, or, query, setDoc, where } from 'firebase/firestore';
+import { addDoc, collection, getDocs, onSnapshot, or, query, where } from 'firebase/firestore';
 import { User, getUsers } from '@classes/User';
 import { Group } from '@classes/Group';
 import Calendar from '@pages/CalendarView';
@@ -97,16 +97,17 @@ function App() {
 
 // get user from database
 async function getUserData(email: string, displayName: string): Promise<User> {
-  const userData = await getDoc(doc(db, 'User', email));
+  const userData = await getDocs(query(collection(db, 'User'), where('email', '==', email)));
 
   // retrieves user data from database
-  if (userData.exists()) {
-    const user = userData.data();
+  if (!userData.empty) {
+    const user = userData.docs[0].data();
     return new User(email, user.display_name, user.timezone, user.theme);
   }
   // add user to the database if they are not in it
   const timezone = moment.tz.guess();
-  await setDoc(doc(db, 'User', email), {
+  await addDoc(collection(db, 'User'), {
+    email: email,
     display_name: displayName,
     timezone: timezone,
     theme: 'light'

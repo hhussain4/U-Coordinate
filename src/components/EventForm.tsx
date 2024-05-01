@@ -51,7 +51,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, addEvent, updateEvent, onC
     const fetchUsernames = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'User'));
-        const usernames = querySnapshot.docs.map(doc => doc.id);
+        const usernames = querySnapshot.docs.map(doc => doc.data().email);
         setUsernames(usernames);
       } catch (error) {
         console.error('Error fetching usernames:', error);
